@@ -1,0 +1,87 @@
+<div class="container mx-auto px-6 py-12 max-w-3xl">
+  <div class="mb-8">
+    <a routerLink="/events" class="text-purple-400 hover:text-purple-300 inline-flex items-center">
+      <lucide-icon name="chevron-left" class="mr-2 h-5 w-5"></lucide-icon>
+      Volver a Eventos
+    </a>
+    <h2 class="text-4xl font-extrabold mt-2">Crear Nuevo Evento</h2>
+  </div>
+
+  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Event Name -->
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-300">Nombre del Evento</label>
+      <input type="text" id="name" formControlName="name" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
+      @if (eventForm.get('name')?.invalid && eventForm.get('name')?.touched) {
+        <p class="mt-1 text-sm text-red-500">El nombre es requerido (mín. 3 caracteres).</p>
+      }
+    </div>
+
+    <!-- Date and Time -->
+    <div>
+      <label for="date" class="block text-sm font-medium text-gray-300">Fecha y Hora</label>
+      <input type="datetime-local" id="date" formControlName="date" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
+       @if (eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
+        <p class="mt-1 text-sm text-red-500">La fecha y hora son requeridas.</p>
+      }
+    </div>
+
+    <!-- Location -->
+    <div>
+      <label for="location" class="block text-sm font-medium text-gray-300">Lugar</label>
+      <input type="text" id="location" formControlName="location" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
+       @if (eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
+        <p class="mt-1 text-sm text-red-500">El lugar es requerido.</p>
+      }
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label for="description" class="block text-sm font-medium text-gray-300">Descripción</label>
+      <textarea id="description" formControlName="description" rows="4" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white"></textarea>
+      @if (eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
+        <p class="mt-1 text-sm text-red-500">La descripción es requerida (máx. 500 caracteres).</p>
+      }
+    </div>
+
+    <!-- Promoter -->
+    <div>
+      <label for="promoter" class="block text-sm font-medium text-gray-300">Promotor</label>
+      <input type="text" id="promoter" formControlName="promoter" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
+      @if (eventForm.get('promoter')?.invalid && eventForm.get('promoter')?.touched) {
+        <p class="mt-1 text-sm text-red-500">El promotor es requerido.</p>
+      }
+    </div>
+
+    <!-- Contact Info -->
+    <div formGroupName="contact" class="p-4 border border-gray-700 rounded-lg">
+      <h3 class="text-lg font-medium text-gray-200">Información de Contacto</h3>
+      <div class="mt-2 space-y-2">
+        <div class="flex items-center">
+          <input id="contact-whatsapp" type="radio" value="whatsapp" formControlName="type" class="h-4 w-4 text-purple-600 border-gray-500 focus:ring-purple-500">
+          <label for="contact-whatsapp" class="ml-3 block text-sm font-medium text-gray-300">WhatsApp</label>
+        </div>
+        <div class="flex items-center">
+          <input id="contact-link" type="radio" value="link" formControlName="type" class="h-4 w-4 text-purple-600 border-gray-500 focus:ring-purple-500">
+          <label for="contact-link" class="ml-3 block text-sm font-medium text-gray-300">Enlace Específico</label>
+        </div>
+      </div>
+      <div class="mt-4">
+        <label for="contact-value" class="block text-sm font-medium text-gray-300">
+          {{ eventForm.get('contact.type')?.value === 'whatsapp' ? 'Número de WhatsApp' : 'URL del Enlace' }}
+        </label>
+        <input type="text" id="contact-value" formControlName="value" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
+        @if (eventForm.get('contact.value')?.invalid && eventForm.get('contact.value')?.touched) {
+          <p class="mt-1 text-sm text-red-500">El valor de contacto es requerido.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end">
+      <button type="submit" [disabled]="eventForm.invalid" class="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg">
+        Crear Evento
+      </button>
+    </div>
+  </form>
+</div>

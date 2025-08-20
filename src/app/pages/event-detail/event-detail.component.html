@@ -1,0 +1,64 @@
+<div class="container mx-auto px-6 py-12">
+  @if (event$ | async; as event) {
+    @if (event; else notFound) {
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+          <a routerLink="/events" class="text-purple-400 hover:text-purple-300 inline-flex items-center">
+            <lucide-icon name="chevron-left" class="mr-2 h-5 w-5"></lucide-icon>
+            Volver a Eventos
+          </a>
+        </div>
+
+        <div class="bg-gray-900 border border-purple-500 rounded-lg shadow-2xl overflow-hidden">
+          <div class="p-8">
+            <h1 class="text-5xl font-extrabold mb-4 text-white">{{ event.name }}</h1>
+            <div class="flex flex-wrap gap-x-6 gap-y-2 text-lg text-purple-300 mb-6">
+              <p class="flex items-center">
+                <lucide-icon name="calendar" class="mr-2 h-5 w-5"></lucide-icon>
+                {{ event.date | date:'fullDate':'':'es' }} - {{ event.date | date:'shortTime':'':'es' }}
+              </p>
+              <p class="flex items-center">
+                <lucide-icon name="map-pin" class="mr-2 h-5 w-5"></lucide-icon>
+                {{ event.location }}
+              </p>
+            </div>
+
+            <div class="prose prose-invert prose-lg max-w-none text-gray-300 mb-8">
+              <p>{{ event.description }}</p>
+            </div>
+
+            <div class="border-t border-gray-700 pt-6">
+              <p class="text-gray-400 mb-4">
+                Organizado por: <span class="font-bold text-white">{{ event.promoter }}</span>
+              </p>
+
+              @if (event.contact.type === 'whatsapp') {
+                <a [href]="'https://wa.me/' + event.contact.value" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center justify-center text-lg">
+                  <lucide-icon name="phone" class="mr-3 h-6 w-6"></lucide-icon>
+                  Contactar por WhatsApp
+                </a>
+              } @else {
+                 <a [href]="event.contact.value" target="_blank" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center justify-center text-lg">
+                  <lucide-icon name="link" class="mr-3 h-6 w-6"></lucide-icon>
+                  Comprar Entradas
+                </a>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  } @else {
+    <p class="text-center text-gray-500">Cargando evento...</p>
+  }
+
+  <ng-template #notFound>
+    <div class="text-center py-16">
+      <h2 class="text-4xl font-bold text-red-500">Evento no encontrado</h2>
+      <p class="text-gray-400 mt-4">El evento que buscas no existe o ha sido eliminado.</p>
+      <a routerLink="/events" class="mt-8 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block">
+        Volver a la lista de eventos
+      </a>
+    </div>
+  </ng-template>
+</div>
