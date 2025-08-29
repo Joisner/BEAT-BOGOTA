@@ -105,6 +105,27 @@ export class EventService {
     return of(newEvent);
   }
 
+  deleteEvent(id: number): Observable<void> {
+    const eventIndex = this.events.findIndex(e => e.id === id);
+    if (eventIndex > -1) {
+      this.events.splice(eventIndex, 1);
+      return of(undefined);
+    } else {
+      return throwError(() => new Error('Event not found'));
+    }
+  }
+
+  updateEvent(id: number, eventData: Partial<Event>): Observable<Event> {
+    const eventIndex = this.events.findIndex(e => e.id === id);
+    if (eventIndex > -1) {
+      const updatedEvent = { ...this.events[eventIndex], ...eventData };
+      this.events[eventIndex] = updatedEvent;
+      return of(updatedEvent);
+    } else {
+      return throwError(() => new Error('Event not found'));
+    }
+  }
+
   getEventsByGenre(genre: string): Observable<Event[]> {
     return of(this.events.filter(event => event.genre?.toLowerCase().includes(genre.toLowerCase())));
   }

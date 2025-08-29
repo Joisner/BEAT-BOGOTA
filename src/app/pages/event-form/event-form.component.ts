@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EventService } from '../../core/services/event.service';
 import { IconsModule } from '../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
+import { Event } from '../../core/models/event.model';
 
 @Component({
   selector: 'app-event-form',
@@ -19,16 +20,26 @@ import { LucideAngularModule } from 'lucide-angular';
   styleUrl: './event-form.component.css'
 })
 export class EventFormComponent implements OnInit {
- eventForm!: FormGroup;
+  eventForm!: FormGroup;
   isSubmitting = false;
+  editMode = false;
+  private eventId: number | null = null;
+  pageTitle = 'Crear Nuevo Evento';
+  submitButtonText = 'Crear Evento';
 
   constructor(
     private fb: FormBuilder,
     private eventService: EventService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
+    this.checkMode();
+  }
+
+  private initForm(): void {
     this.eventForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       date: ['', [Validators.required]],
@@ -48,18 +59,55 @@ export class EventFormComponent implements OnInit {
         type: ['whatsapp', [Validators.required]],
         value: ['', [Validators.required]]
       }),
-      tagsInput: [''] // Campo temporal para capturar las etiquetas como string
+      tagsInput: ['']
     });
-
-    // Validador personalizado para asegurar que el precio máximo sea mayor al mínimo
     this.eventForm.get('price')?.setValidators(this.priceRangeValidator);
   }
 
-  // Validador personalizado para el rango de precios
+  private checkMode(): void {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.editMode = true;
+        this.eventId = +id;
+        this.pageTitle = 'Editar Evento';
+        this.submitButtonText = 'Guardar Cambios';
+        this.loadEventData(this.eventId);
+      }
+    });
+  }
+
+  private loadEventData(id: number): void {
+    this.eventService.getEvent(id).subscribe({
+      next: (event) => {
+        if (event) {
+          this.eventForm.patchValue({
+            ...event,
+            date: this.formatDateForInput(event.date),
+            tagsInput: event.tags?.join(', ') || ''
+          });
+        } else {
+          // Handle case where event is not found
+          this.router.navigate(['/admin/events']);
+        }
+      },
+      error: () => this.router.navigate(['/admin/events'])
+    });
+  }
+
+  private formatDateForInput(date: Date): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    const hours = ('0' + d.getHours()).slice(-2);
+    const minutes = ('0' + d.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
   priceRangeValidator(group: any) {
     const min = group.get('min')?.value;
     const max = group.get('max')?.value;
-    
     if (min && max && parseFloat(max) <= parseFloat(min)) {
       return { priceRangeInvalid: true };
     }
@@ -76,13 +124,11 @@ export class EventFormComponent implements OnInit {
     this.isSubmitting = true;
     const formValue = this.eventForm.value;
     
-    // Procesar las etiquetas
     const tags = formValue.tagsInput 
       ? formValue.tagsInput.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag)
       : [];
 
-    // Preparar los datos del evento
-    const eventData = {
+    const eventData: Partial<Event> = {
       name: formValue.name,
       date: new Date(formValue.date),
       location: formValue.location,
@@ -100,17 +146,19 @@ export class EventFormComponent implements OnInit {
       tags: tags.length > 0 ? tags : undefined
     };
 
-    this.eventService.addEvent(eventData).subscribe({
-      next: (createdEvent) => {
-        console.log('Event created successfully!', createdEvent);
+    const operation = this.editMode && this.eventId
+      ? this.eventService.updateEvent(this.eventId, eventData)
+      : this.eventService.addEvent(eventData as Omit<Event, 'id'>);
+
+    operation.subscribe({
+      next: (result) => {
         this.showSuccessMessage();
-        // Redirigir al evento creado después de un breve delay para mostrar el mensaje
         setTimeout(() => {
-          this.router.navigate(['/events', createdEvent.id]);
+          this.router.navigate(['/admin/events']);
         }, 1500);
       },
       error: (err) => {
-        console.error('Error creating event:', err);
+        console.error('Error saving event:', err);
         this.showErrorMessage();
         this.isSubmitting = false;
       }
