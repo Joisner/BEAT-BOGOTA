@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { Event } from '../../core/models/event.model';
 import { EventService } from '../../core/services/event.service';
+import { IconsModule } from '../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -13,6 +14,7 @@ import { LucideAngularModule } from 'lucide-angular';
   imports: [
     CommonModule,
     RouterModule,
+    IconsModule,
     LucideAngularModule
   ],
   templateUrl: './event-detail.component.html',
@@ -24,7 +26,7 @@ export class EventDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.event$ = this.route.paramMap.pipe(

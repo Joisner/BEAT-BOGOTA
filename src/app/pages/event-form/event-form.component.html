@@ -1,87 +1,399 @@
-<div class="container mx-auto px-6 py-12 max-w-3xl">
-  <div class="mb-8">
-    <a routerLink="/events" class="text-purple-400 hover:text-purple-300 inline-flex items-center">
-      <lucide-icon name="chevron-left" class="mr-2 h-5 w-5"></lucide-icon>
-      Volver a Eventos
-    </a>
-    <h2 class="text-4xl font-extrabold mt-2">Crear Nuevo Evento</h2>
+<div class="min-h-screen bg-black relative overflow-hidden">
+  <!-- Animated Background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500/5 via-transparent to-transparent animate-pulse"></div>
+
+  <div class="container mx-auto px-6 py-12 max-w-4xl relative z-10">
+    
+    <!-- Header Section -->
+    <div class="mb-12">
+      <a routerLink="/events" 
+         class="group inline-flex items-center text-purple-400 hover:text-purple-300 mb-6 transition-colors duration-300">
+        <lucide-icon name="chevron-left" class="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform duration-300"></lucide-icon>
+        Volver a Eventos
+      </a>
+      
+      <div class="text-center">
+        <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+          CREAR EVENTO
+        </h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+          Dale vida a tu evento de música electrónica. Completa los detalles y prepárate para hacer historia.
+        </p>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 md:p-12 shadow-2xl">
+      
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="space-y-8">
+        
+        <!-- Basic Info Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="info" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Información Básica
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Event Name -->
+            <div class="md:col-span-2">
+              <label for="name" class="block text-lg font-semibold text-gray-200 mb-3">
+                Nombre del Evento
+              </label>
+              <input type="text" 
+                     id="name" 
+                     formControlName="name" 
+                     placeholder="ej. TECHNO INVASION 2024"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (eventForm.get('name')?.invalid && eventForm.get('name')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  El nombre es requerido (mínimo 3 caracteres)
+                </p>
+              }
+            </div>
+
+            <!-- Date -->
+            <div>
+              <label for="date" class="block text-lg font-semibold text-gray-200 mb-3">
+                Fecha y Hora
+              </label>
+              <input type="datetime-local" 
+                     id="date" 
+                     formControlName="date"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La fecha y hora son requeridas
+                </p>
+              }
+            </div>
+
+            <!-- Genre -->
+            <div>
+              <label for="genre" class="block text-lg font-semibold text-gray-200 mb-3">
+                Género Musical
+              </label>
+              <select formControlName="genre" 
+                      id="genre"
+                      class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+                <option value="">Seleccionar género</option>
+                <option value="Techno">Techno</option>
+                <option value="House">House</option>
+                <option value="Psytrance">Psytrance</option>
+                <option value="Trance">Trance</option>
+                <option value="Progressive">Progressive</option>
+                <option value="Drum & Bass">Drum & Bass</option>
+                <option value="Dubstep">Dubstep</option>
+                <option value="Multi-género">Multi-género</option>
+              </select>
+            </div>
+
+            <!-- Location -->
+            <div class="md:col-span-2">
+              <label for="location" class="block text-lg font-semibold text-gray-200 mb-3">
+                Ubicación
+              </label>
+              <input type="text" 
+                     id="location" 
+                     formControlName="location"
+                     placeholder="ej. Warehouse 47, Bogotá"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La ubicación es requerida
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="file-text" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Detalles del Evento
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Description -->
+            <div class="md:col-span-2">
+              <label for="description" class="block text-lg font-semibold text-gray-200 mb-3">
+                Descripción
+              </label>
+              <textarea id="description" 
+                        formControlName="description" 
+                        rows="6"
+                        placeholder="Describe la experiencia que vivirán los asistentes..."
+                        class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70 resize-none"></textarea>
+              @if (eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La descripción es requerida (máximo 500 caracteres)
+                </p>
+              }
+            </div>
+
+            <!-- Image URL -->
+            <div class="md:col-span-2">
+              <label for="imageUrl" class="block text-lg font-semibold text-gray-200 mb-3">
+                URL de la Imagen del Evento
+              </label>
+              <input type="url" 
+                     id="imageUrl" 
+                     formControlName="imageUrl"
+                     placeholder="https://ejemplo.com/imagen-evento.jpg"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+              <p class="mt-2 text-gray-400 text-sm">
+                Agrega una imagen atractiva que represente tu evento
+              </p>
+            </div>
+
+            <!-- Capacity -->
+            <div>
+              <label for="capacity" class="block text-lg font-semibold text-gray-200 mb-3">
+                Capacidad (opcional)
+              </label>
+              <input type="number" 
+                     id="capacity" 
+                     formControlName="capacity"
+                     placeholder="ej. 500"
+                     min="1"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+            </div>
+
+            <!-- Featured Event -->
+            <div class="flex items-center">
+              <div class="mt-8">
+                <label class="flex items-center cursor-pointer">
+                  <input type="checkbox" 
+                         formControlName="featured"
+                         class="sr-only">
+                  <div class="relative">
+                    <div class="w-12 h-6 bg-gray-600 rounded-full shadow-inner transition-colors duration-300" 
+                         [class]="eventForm.get('featured')?.value ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-gray-600'"></div>
+                    <div class="absolute w-4 h-4 bg-white rounded-full shadow top-1 transition-transform duration-300"
+                         [class]="eventForm.get('featured')?.value ? 'translate-x-7 left-0' : 'translate-x-1 left-0'"></div>
+                  </div>
+                  <span class="ml-3 text-lg font-semibold text-gray-200">Evento Destacado</span>
+                </label>
+                <p class="mt-1 text-gray-400 text-sm">Los eventos destacados aparecen primero</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="dollar-sign" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Precios
+          </h2>
+          
+          <div formGroupName="price" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Min Price -->
+            <div>
+              <label for="minPrice" class="block text-lg font-semibold text-gray-200 mb-3">
+                Precio Mínimo (COP)
+              </label>
+              <input type="number" 
+                     id="minPrice" 
+                     formControlName="min"
+                     placeholder="50000"
+                     min="0"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 hover:border-gray-500/70">
+            </div>
+
+            <!-- Max Price -->
+            <div>
+              <label for="maxPrice" class="block text-lg font-semibold text-gray-200 mb-3">
+                Precio Máximo (opcional)
+              </label>
+              <input type="number" 
+                     id="maxPrice" 
+                     formControlName="max"
+                     placeholder="100000"
+                     min="0"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 hover:border-gray-500/70">
+            </div>
+
+            <!-- Currency -->
+            <div>
+              <label for="currency" class="block text-lg font-semibold text-gray-200 mb-3">
+                Moneda
+              </label>
+              <select formControlName="currency" 
+                      id="currency"
+                      class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 hover:border-gray-500/70">
+                <option value="COP">COP (Pesos Colombianos)</option>
+                <option value="USD">USD (Dólares)</option>
+                <option value="EUR">EUR (Euros)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organization Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="users" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Organización
+          </h2>
+          
+          <!-- Promoter -->
+          <div class="mb-8">
+            <label for="promoter" class="block text-lg font-semibold text-gray-200 mb-3">
+              Promotor/Organizador
+            </label>
+            <input type="text" 
+                   id="promoter" 
+                   formControlName="promoter"
+                   placeholder="ej. Rave Masters"
+                   class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+            @if (eventForm.get('promoter')?.invalid && eventForm.get('promoter')?.touched) {
+              <p class="mt-2 text-red-400 flex items-center">
+                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                El promotor es requerido
+              </p>
+            }
+          </div>
+
+          <!-- Contact Info -->
+          <div formGroupName="contact" class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-500/30 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-white mb-6">Información de Contacto</h3>
+            
+            <!-- Contact Type -->
+            <div class="mb-6">
+              <p class="text-lg font-semibold text-gray-200 mb-4">Tipo de Contacto</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <label class="group cursor-pointer">
+                  <input type="radio" 
+                         value="whatsapp" 
+                         formControlName="type" 
+                         class="sr-only">
+                  <div class="relative bg-gray-800/60 border-2 border-gray-600/50 rounded-xl p-6 transition-all duration-300 group-hover:border-green-500/50"
+                       [class]="eventForm.get('contact.type')?.value === 'whatsapp' ? 'border-green-500 bg-green-500/10' : 'border-gray-600/50'">
+                    <div class="flex items-center">
+                      <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                        <lucide-icon name="phone" class="h-6 w-6 text-white"></lucide-icon>
+                      </div>
+                      <div>
+                        <h4 class="text-white font-bold text-lg">WhatsApp</h4>
+                        <p class="text-gray-400 text-sm">Contacto directo por mensaje</p>
+                      </div>
+                    </div>
+                    @if (eventForm.get('contact.type')?.value === 'whatsapp') {
+                      <div class="absolute top-3 right-3">
+                        <lucide-icon name="check-circle" class="h-6 w-6 text-green-500"></lucide-icon>
+                      </div>
+                    }
+                  </div>
+                </label>
+
+                <label class="group cursor-pointer">
+                  <input type="radio" 
+                         value="link" 
+                         formControlName="type" 
+                         class="sr-only">
+                  <div class="relative bg-gray-800/60 border-2 border-gray-600/50 rounded-xl p-6 transition-all duration-300 group-hover:border-blue-500/50"
+                       [class]="eventForm.get('contact.type')?.value === 'link' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-600/50'">
+                    <div class="flex items-center">
+                      <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                        <lucide-icon name="link" class="h-6 w-6 text-white"></lucide-icon>
+                      </div>
+                      <div>
+                        <h4 class="text-white font-bold text-lg">Enlace Web</h4>
+                        <p class="text-gray-400 text-sm">Página de venta de entradas</p>
+                      </div>
+                    </div>
+                    @if (eventForm.get('contact.type')?.value === 'link') {
+                      <div class="absolute top-3 right-3">
+                        <lucide-icon name="check-circle" class="h-6 w-6 text-blue-500"></lucide-icon>
+                      </div>
+                    }
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Contact Value -->
+            <div>
+              <label for="contact-value" class="block text-lg font-semibold text-gray-200 mb-3">
+                @if (eventForm.get('contact.type')?.value === 'whatsapp') {
+                  <span class="flex items-center">
+                    <lucide-icon name="phone" class="mr-2 h-5 w-5 text-green-400"></lucide-icon>
+                    Número de WhatsApp
+                  </span>
+                } @else {
+                  <span class="flex items-center">
+                    <lucide-icon name="link" class="mr-2 h-5 w-5 text-blue-400"></lucide-icon>
+                    URL del Enlace
+                  </span>
+                }
+              </label>
+              <input type="text" 
+                     id="contact-value" 
+                     formControlName="value"
+                     [placeholder]="eventForm.get('contact.type')?.value === 'whatsapp' ? 'ej. 573101234567' : 'ej. https://beatbogota.com/tickets'"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (eventForm.get('contact.value')?.invalid && eventForm.get('contact.value')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  El valor de contacto es requerido
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="tag" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Etiquetas (opcional)
+          </h2>
+          
+          <div>
+            <input type="text" 
+                   formControlName="tagsInput"
+                   placeholder="Escribe etiquetas separadas por comas (ej. Underground, All Night, International)"
+                   class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 hover:border-gray-500/70">
+            <p class="mt-2 text-gray-400 text-sm">
+              Las etiquetas ayudan a los usuarios a encontrar tu evento más fácilmente
+            </p>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center pt-8 border-t border-gray-700/50">
+          <button type="submit" 
+                  [disabled]="eventForm.invalid"
+                  class="group relative inline-flex items-center justify-center px-12 py-6 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-black text-xl rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 disabled:hover:scale-100 disabled:hover:shadow-none">
+            <div class="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="relative flex items-center">
+              <lucide-icon name="sparkles" class="mr-3 h-6 w-6 group-hover:animate-spin"></lucide-icon>
+              <span>Crear Evento Épico</span>
+            </div>
+          </button>
+          
+          <p class="mt-4 text-gray-400 text-sm">
+            Una vez creado, tu evento estará disponible para todos los amantes de la música electrónica
+          </p>
+        </div>
+      </form>
+    </div>
   </div>
-
-  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    <!-- Event Name -->
-    <div>
-      <label for="name" class="block text-sm font-medium text-gray-300">Nombre del Evento</label>
-      <input type="text" id="name" formControlName="name" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
-      @if (eventForm.get('name')?.invalid && eventForm.get('name')?.touched) {
-        <p class="mt-1 text-sm text-red-500">El nombre es requerido (mín. 3 caracteres).</p>
-      }
-    </div>
-
-    <!-- Date and Time -->
-    <div>
-      <label for="date" class="block text-sm font-medium text-gray-300">Fecha y Hora</label>
-      <input type="datetime-local" id="date" formControlName="date" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
-       @if (eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
-        <p class="mt-1 text-sm text-red-500">La fecha y hora son requeridas.</p>
-      }
-    </div>
-
-    <!-- Location -->
-    <div>
-      <label for="location" class="block text-sm font-medium text-gray-300">Lugar</label>
-      <input type="text" id="location" formControlName="location" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
-       @if (eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
-        <p class="mt-1 text-sm text-red-500">El lugar es requerido.</p>
-      }
-    </div>
-
-    <!-- Description -->
-    <div>
-      <label for="description" class="block text-sm font-medium text-gray-300">Descripción</label>
-      <textarea id="description" formControlName="description" rows="4" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white"></textarea>
-      @if (eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
-        <p class="mt-1 text-sm text-red-500">La descripción es requerida (máx. 500 caracteres).</p>
-      }
-    </div>
-
-    <!-- Promoter -->
-    <div>
-      <label for="promoter" class="block text-sm font-medium text-gray-300">Promotor</label>
-      <input type="text" id="promoter" formControlName="promoter" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
-      @if (eventForm.get('promoter')?.invalid && eventForm.get('promoter')?.touched) {
-        <p class="mt-1 text-sm text-red-500">El promotor es requerido.</p>
-      }
-    </div>
-
-    <!-- Contact Info -->
-    <div formGroupName="contact" class="p-4 border border-gray-700 rounded-lg">
-      <h3 class="text-lg font-medium text-gray-200">Información de Contacto</h3>
-      <div class="mt-2 space-y-2">
-        <div class="flex items-center">
-          <input id="contact-whatsapp" type="radio" value="whatsapp" formControlName="type" class="h-4 w-4 text-purple-600 border-gray-500 focus:ring-purple-500">
-          <label for="contact-whatsapp" class="ml-3 block text-sm font-medium text-gray-300">WhatsApp</label>
-        </div>
-        <div class="flex items-center">
-          <input id="contact-link" type="radio" value="link" formControlName="type" class="h-4 w-4 text-purple-600 border-gray-500 focus:ring-purple-500">
-          <label for="contact-link" class="ml-3 block text-sm font-medium text-gray-300">Enlace Específico</label>
-        </div>
-      </div>
-      <div class="mt-4">
-        <label for="contact-value" class="block text-sm font-medium text-gray-300">
-          {{ eventForm.get('contact.type')?.value === 'whatsapp' ? 'Número de WhatsApp' : 'URL del Enlace' }}
-        </label>
-        <input type="text" id="contact-value" formControlName="value" class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-white">
-        @if (eventForm.get('contact.value')?.invalid && eventForm.get('contact.value')?.touched) {
-          <p class="mt-1 text-sm text-red-500">El valor de contacto es requerido.</p>
-        }
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="flex justify-end">
-      <button type="submit" [disabled]="eventForm.invalid" class="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg">
-        Crear Evento
-      </button>
-    </div>
-  </form>
 </div>
