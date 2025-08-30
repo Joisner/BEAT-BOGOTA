@@ -37,6 +37,8 @@ export class LoginComponent {
     this.error = '';
     this.authService.loginWithGoogle()
       .then(user => {
+        debugger;
+        localStorage.setItem('auth_firebase', JSON.stringify(user.providerData))
         this.router.navigate(['/admin/events']);
       })
       .catch(err => {

@@ -1,33 +1,67 @@
 <header class="bg-black text-white shadow-md">
-  <nav class="container mx-auto px-6 py-4 flex items-center space-x-4">
-    <!-- Ícono -->
-    <div
-      class="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full backdrop-blur-sm border border-purple-500/30">
-      <svg class="w-10 h-10 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
-        </path>
-      </svg>
+  <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2">
+      <div
+        class="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full backdrop-blur-sm border border-purple-500/30">
+        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
+          </path>
+        </svg>
+      </div>
+      <h1 class="text-lg md:text-2xl font-bold" routerLink="/events">BEAT BOGOTÁ</h1>
     </div>
 
-    <!-- Texto -->
-    <h1 class="text-2xl font-bold">BEAT BOGOTÁ</h1>
-    <lucide-icon name="home" [routerLink]="'/events'"></lucide-icon>
-    <!-- Enlaces admin -->
-<!--     <nav class="flex space-x-4 ml-8">
-      <a routerLink="/admin/events" routerLinkActive="text-purple-400" class="hover:text-purple-300 transition-colors">Eventos</a>
-      <a routerLink="/admin/promotores" routerLinkActive="text-purple-400" class="hover:text-purple-300 transition-colors">Promotores</a>
-      <a routerLink="/admin/descuentos" routerLinkActive="text-purple-400" class="hover:text-purple-300 transition-colors">Descuentos</a>
-      <a routerLink="/admin/etapas-boleta" routerLinkActive="text-purple-400" class="hover:text-purple-300 transition-colors">Etapas</a>
-    </nav> -->
-    <!-- Carrito de compras -->
-    <div class="ml-auto flex items-center">
+    <!-- Botón menú (solo móvil) -->
+    <button class="md:hidden p-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30"
+      (click)="isMenuOpen = !isMenuOpen">
+      <lucide-icon name="menu" class="w-6 h-6 text-purple-300" />
+    </button>
+
+    <!-- Menú principal -->
+    <div
+      class="hidden md:flex items-center space-x-6">
+     <!--  <a routerLink="/events" routerLinkActive="text-purple-400"
+        class="flex items-center space-x-1 hover:text-purple-300 transition-colors">
+        <lucide-icon name="home" class="w-5 h-5" />
+        <span>Eventos</span>
+      </a> -->
+
+      <!-- Usuario -->
+      <div class="flex items-center space-x-2">
+        <lucide-icon name="user" class="w-5 h-5 text-purple-300" />
+        <span class="text-sm font-medium">{{ userLogged }}</span>
+      </div>
+
+      <!-- Carrito -->
       <a [routerLink]="'/cart'" class="relative group">
-        <lucide-icon name="shopping-cart" class="w-7 h-7 text-purple-300 hover:text-pink-400 transition" />
-        <span *ngIf="cartService.getItems().length > 0" class="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full px-2 py-0.5 shadow-lg animate-pulse">
+        <lucide-icon name="shopping-cart"
+          class="w-6 h-6 text-purple-300 hover:text-pink-400 transition" />
+        <span *ngIf="cartService.getItems().length > 0"
+          class="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full px-2 py-0.5 shadow-lg animate-pulse">
           {{ cartService.getItems().length }}
         </span>
       </a>
     </div>
   </nav>
+
+  <!-- Menú desplegable móvil -->
+  <div *ngIf="isMenuOpen" class="md:hidden bg-black border-t border-purple-500/20">
+    <div class="flex flex-col space-y-3 p-4">
+      <a routerLink="/events" routerLinkActive="text-purple-400"
+        class="flex items-center space-x-2 hover:text-purple-300 transition-colors">
+        <lucide-icon name="home" class="w-5 h-5" />
+        <span>Eventos</span>
+      </a>
+      <div class="flex items-center space-x-2">
+        <lucide-icon name="user" class="w-5 h-5 text-purple-300" />
+        <span>{{ userLogged }}</span>
+      </div>
+      <a [routerLink]="'/cart'" class="flex items-center space-x-2 hover:text-pink-400 transition">
+        <lucide-icon name="shopping-cart" class="w-5 h-5 text-purple-300" />
+        <span>Carrito ({{ cartService.getItems().length }})</span>
+      </a>
+    </div>
+  </div>
 </header>

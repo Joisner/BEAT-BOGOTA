@@ -3,39 +3,19 @@
   <div class="container mx-auto px-6 py-12 relative z-10">
     <div class="max-w-2xl mx-auto bg-black/70 rounded-2xl shadow-lg p-8 border border-purple-900/40">
       <h2 class="text-2xl font-bold text-purple-300 mb-6 text-center">Pago de Entradas</h2>
-      <form class="space-y-6">
-        <div>
-          <label class="block text-purple-200 mb-1">Nombre completo</label>
-          <input type="text" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Tu nombre" />
+      <form id="form-checkout" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div id="form-checkout__cardNumber" class="w-full h-12 p-3 rounded bg-gray-900 text-gray-200 border border-purple-800 focus-within:ring-2 focus-within:ring-purple-500"></div>
+          <div id="form-checkout__expirationDate" class="w-full h-12 p-3 rounded bg-gray-900 text-gray-200 border border-purple-800 focus-within:ring-2 focus-within:ring-purple-500"></div>
+          <div id="form-checkout__securityCode" class="w-full h-12 p-3 rounded bg-gray-900 text-gray-200 border border-purple-800 focus-within:ring-2 focus-within:ring-purple-500"></div>
+          <input type="text" id="form-checkout__cardholderName" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Nombre del titular"/>
+          <input type="email" id="form-checkout__cardholderEmail" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Email"/>
+          <select id="form-checkout__issuer" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500"></select>
+          <select id="form-checkout__installments" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500"></select>
+          <select id="form-checkout__identificationType" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500"></select>
+          <input type="text" id="form-checkout__identificationNumber" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Número de documento"/>
         </div>
-        <div>
-          <label class="block text-purple-200 mb-1">Correo electrónico</label>
-          <input type="email" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="tucorreo@email.com" />
-        </div>
-        <div>
-          <label class="block text-purple-200 mb-1">Método de pago</label>
-          <select class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
-            <option value="">Selecciona...</option>
-            <option value="pse">PSE</option>
-            <option value="tarjeta">Tarjeta de crédito</option>
-          </select>
-        </div>
-        <!-- Mock de campos para tarjeta -->
-        <div>
-          <label class="block text-purple-200 mb-1">Número de tarjeta</label>
-          <input type="text" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="0000 0000 0000 0000" />
-        </div>
-        <div class="flex gap-4">
-          <div class="flex-1">
-            <label class="block text-purple-200 mb-1">Expira</label>
-            <input type="text" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="MM/AA" />
-          </div>
-          <div class="flex-1">
-            <label class="block text-purple-200 mb-1">CVC</label>
-            <input type="text" class="w-full px-4 py-2 rounded bg-gray-900 text-gray-200 border border-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="123" />
-          </div>
-        </div>
-        <button type="submit" class="w-full px-6 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition text-lg font-bold">Pagar</button>
+        <button type="submit" id="form-checkout__submit" class="w-full px-6 py-3 rounded bg-green-600 text-white hover:bg-green-700 transition text-lg font-bold">Pagar</button>
       </form>
     </div>
   </div>

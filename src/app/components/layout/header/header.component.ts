@@ -14,5 +14,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  constructor(public cartService: CartService) {}
+  userLogged: any;
+  isMenuOpen = false;
+
+  constructor(public cartService: CartService) {
+    debugger
+    const userString = localStorage.getItem('auth_firebase');
+    if (userString) {
+      const user = JSON.parse(userString); // ahora es un objeto
+      this.userLogged = user[0].displayName; // aquí ya puedes acceder a displayName
+    }
+  }
 }
