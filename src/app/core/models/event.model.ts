@@ -4,20 +4,7 @@ export interface Event {
   date: Date;
   location: string;
   description: string;
-  promoter: string;
-  contact: {
-    type: 'link' | 'whatsapp';
-    value: string;
-  };
-}
-
-export interface Event {
-  id: number;
-  name: string;
-  date: Date;
-  location: string;
-  description: string;
-  promoter: string;
+  promotores: string[]; // IDs de promotores responsables
   contact: {
     type: 'whatsapp' | 'link';
     value: string;
@@ -32,4 +19,5 @@ export interface Event {
   tags?: string[];
   capacity?: number;
   featured?: boolean;
+  promotor?: any;
 }

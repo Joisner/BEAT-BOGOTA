@@ -251,20 +251,38 @@
             Organización
           </h2>
           
-          <!-- Promoter -->
+          <!-- Promotores responsables -->
           <div class="mb-8">
-            <label for="promoter" class="block text-lg font-semibold text-gray-200 mb-3">
-              Promotor/Organizador
+            <label for="promotores" class="block text-lg font-semibold text-gray-200 mb-3">
+              Promotores Responsables
             </label>
-            <input type="text" 
-                   id="promoter" 
-                   formControlName="promoter"
-                   placeholder="ej. Rave Masters"
-                   class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
-            @if (eventForm.get('promoter')?.invalid && eventForm.get('promoter')?.touched) {
+            <select id="promotores" formControlName="promotores" multiple
+              class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+              <option *ngFor="let promotor of promotores" [value]="promotor.id">{{ promotor.nombre }}</option>
+            </select>
+            <p class="mt-2 text-gray-400 text-sm">Selecciona uno o varios promotores responsables del evento.</p>
+            @if (eventForm.get('promotores')?.invalid && eventForm.get('promotores')?.touched) {
               <p class="mt-2 text-red-400 flex items-center">
                 <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
-                El promotor es requerido
+                Debes seleccionar al menos un promotor
+              </p>
+            }
+          </div>
+
+          <!-- Etapas de boleta -->
+          <div class="mb-8">
+            <label for="etapas" class="block text-lg font-semibold text-gray-200 mb-3">
+              Etapas de Boleta
+            </label>
+            <select id="etapas" formControlName="etapas" multiple
+              class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+              <option *ngFor="let etapa of etapas" [value]="etapa.id">{{ etapa.nombre }} ({{ etapa.precio | currency:'COP':'symbol' }})</option>
+            </select>
+            <p class="mt-2 text-gray-400 text-sm">Selecciona una o varias etapas de boleta para este evento.</p>
+            @if (eventForm.get('etapas')?.invalid && eventForm.get('etapas')?.touched) {
+              <p class="mt-2 text-red-400 flex items-center">
+                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                Debes seleccionar al menos una etapa
               </p>
             }
           </div>

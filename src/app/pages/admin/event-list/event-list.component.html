@@ -17,6 +17,7 @@
               <th scope="col" class="px-6 py-4">Evento</th>
               <th scope="col" class="px-6 py-4">Fecha</th>
               <th scope="col" class="px-6 py-4">Ubicación</th>
+              <th scope="col" class="px-6 py-4">Promotores</th>
               <th scope="col" class="px-6 py-4 text-center">Acciones</th>
             </tr>
           </thead>
@@ -26,6 +27,7 @@
               <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ event.name }}</td>
               <td class="px-6 py-4">{{ event.date | date:'d MMMM, yyyy • h:mm a' }}</td>
               <td class="px-6 py-4">{{ event.location }}</td>
+              <td class="px-6 py-4">{{ getPromotorNombres(event.promotores) }}</td>
               <td class="px-6 py-4 text-center">
                 <a [routerLink]="['/admin/events/edit', event.id]"
                   class="text-cyan-400 hover:text-cyan-300 mr-4 font-semibold transition-colors duration-200">
@@ -40,14 +42,14 @@
               </td>
             </tr>
             <tr *ngIf="events.length === 0">
-              <td colspan="4" class="px-6 py-12 text-center text-gray-400">
+              <td colspan="5" class="px-6 py-12 text-center text-gray-400">
                 No hay eventos para mostrar. ¡Crea el primero!
               </td>
             </tr>
           </tbody>
           <ng-template #loading>
             <tr>
-              <td colspan="4" class="px-6 py-12 text-center text-gray-400">
+              <td colspan="5" class="px-6 py-12 text-center text-gray-400">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-500 border-t-transparent"></div>
                 <p class="mt-2">Cargando eventos...</p>
               </td>

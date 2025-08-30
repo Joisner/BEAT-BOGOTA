@@ -4,22 +4,38 @@ import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Event } from '../../../core/models/event.model';
 import { EventService } from '../../../core/services/event.service';
+import { PromotorService } from '../../../core/services/promotor.service';
+import { Promotor } from '../../../core/models/promotor.model';
 import { LucideAngularModule } from 'lucide-angular';
+import { IconsModule } from '../../../core/module/icons.module';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule],
+  imports: [CommonModule, RouterModule, LucideAngularModule, IconsModule],
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.css']
 })
 export class EventListComponent implements OnInit {
-  events$!: Observable<Event[]>;
 
-  constructor(private eventService: EventService) {}
+  events$!: Observable<Event[]>;
+  promotores: Promotor[] = [];
+
+  constructor(private eventService: EventService, private promotorService: PromotorService) {}
 
   ngOnInit(): void {
     this.events$ = this.eventService.getEvents();
+    this.promotorService.getPromotores().subscribe(promotores => {
+      this.promotores = promotores;
+    });
+  }
+
+  getPromotorNombres(ids: string[]): string {
+    if (!ids || !Array.isArray(ids)) return '';
+    return this.promotores
+      .filter(p => ids.includes(p.id))
+      .map(p => p.nombre)
+      .join(', ');
   }
 
   deleteEvent(eventId: number): void {

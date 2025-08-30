@@ -37,7 +37,7 @@ export class LoginComponent {
     this.error = '';
     this.authService.loginWithGoogle()
       .then(user => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/admin/events']);
       })
       .catch(err => {
         this.error = 'No se pudo iniciar sesión con Google';

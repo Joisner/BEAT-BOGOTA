@@ -13,7 +13,7 @@ export class EventService {
       date: new Date('2024-12-15T22:00:00'),
       location: 'Warehouse 47, Bogotá',
       description: 'Una noche de techno puro con DJs internacionales y locales. Prepárate para bailar hasta el amanecer en una experiencia sonora única que te llevará a otro nivel.',
-      promoter: 'Rave Masters',
+      promotores: ['Rave Masters'],
       contact: {
         type: 'whatsapp',
         value: '573101234567'
@@ -31,7 +31,7 @@ export class EventService {
       date: new Date('2024-12-21T16:00:00'),
       location: 'Rooftop 100, Bogotá',
       description: 'Disfruta del mejor deep house y tech house con una vista espectacular del atardecer sobre la ciudad. Una experiencia única que combina música de calidad con ambiente sofisticado.',
-      promoter: 'Groove Productions',
+      promotores: ['Groove Productions'],
       contact: {
         type: 'link',
         value: 'https://beatbogota.com/tickets/house-sunset'
@@ -49,7 +49,7 @@ export class EventService {
       date: new Date('2025-01-05T20:00:00'),
       location: 'La Calera, Cundinamarca',
       description: 'Un viaje místico a través del sonido y la naturaleza. Experiencia full-on psytrance en medio del bosque con visuales psicodélicos y una comunidad vibrante.',
-      promoter: 'Cosmic Tribe',
+      promotores: ['Cosmic Tribe'],
       contact: {
         type: 'whatsapp',
         value: '573117654321'
@@ -67,7 +67,7 @@ export class EventService {
       date: new Date('2025-01-12T21:00:00'),
       location: 'Centro de Convenciones, Medellín',
       description: 'El festival de música electrónica más grande del año. Múltiples escenarios con los mejores DJs nacionales e internacionales. Una experiencia completa de 12 horas.',
-      promoter: 'Electronic Colombia',
+      promotores: ['Electronic Colombia'],
       contact: {
         type: 'link',
         value: 'https://electronicparadise.co/tickets'

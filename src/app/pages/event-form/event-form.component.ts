@@ -6,6 +6,10 @@ import { EventService } from '../../core/services/event.service';
 import { IconsModule } from '../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
 import { Event } from '../../core/models/event.model';
+import { PromotorService } from '../../core/services/promotor.service';
+import { Promotor } from '../../core/models/promotor.model';
+import { EtapaBoletaService } from '../../core/services/etapa-boleta.service';
+import { EtapaBoleta } from '../../core/models/etapa-boleta.model';
 
 @Component({
   selector: 'app-event-form',
@@ -27,9 +31,14 @@ export class EventFormComponent implements OnInit {
   pageTitle = 'Crear Nuevo Evento';
   submitButtonText = 'Crear Evento';
 
+  promotores: Promotor[] = [];
+  etapas: EtapaBoleta[] = [];
+
   constructor(
     private fb: FormBuilder,
     private eventService: EventService,
+    private promotorService: PromotorService,
+    private etapaBoletaService: EtapaBoletaService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -37,6 +46,12 @@ export class EventFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.checkMode();
+    this.promotorService.getPromotores().subscribe(promotores => {
+      this.promotores = promotores;
+    });
+    this.etapaBoletaService.getEtapas().subscribe(etapas => {
+      this.etapas = etapas;
+    });
   }
 
   private initForm(): void {
@@ -45,7 +60,8 @@ export class EventFormComponent implements OnInit {
       date: ['', [Validators.required]],
       location: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      promoter: ['', [Validators.required]],
+      promotores: [[], [Validators.required]],
+      etapas: [[], [Validators.required]],
       imageUrl: [''],
       genre: ['', [Validators.required]],
       capacity: ['', [Validators.min(1)]],
@@ -133,7 +149,7 @@ export class EventFormComponent implements OnInit {
       date: new Date(formValue.date),
       location: formValue.location,
       description: formValue.description,
-      promoter: formValue.promoter,
+      promotores: formValue.promotores,
       imageUrl: formValue.imageUrl || this.getDefaultImage(formValue.genre),
       genre: formValue.genre,
       capacity: formValue.capacity ? parseInt(formValue.capacity) : undefined,
