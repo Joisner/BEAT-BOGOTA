@@ -33,13 +33,10 @@ from sqlalchemy.orm import Session
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # --- MOCKED AUTHENTICATION FOR DEVELOPMENT ---
-# This mock function simulates token verification and user lookup.
-# It expects a token in the format "Bearer <user_id>:<role>"
-# e.g., "Bearer user1:admin" or "Bearer promoter2:promotor"
-
-async def get_current_user_mock(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user_mock(token: str = Depends(oauth2_scheme)):
     """
-    Mocked dependency to simulate user authentication.
+    Modified mock dependency that simulates user authentication without DB writes.
+    It creates an in-memory user object.
     Pass a token like "Bearer <user_id>:<role>" in the Authorization header.
     Example: "user1:admin"
     """
@@ -51,30 +48,19 @@ async def get_current_user_mock(token: str = Depends(oauth2_scheme), db: Session
             detail="Invalid mock token format. Expected '<user_id>:<role>'."
         )
 
-    # In a real app, you'd verify the token. Here, we just look up the user.
-    user = db.query(User).filter(User.id == user_id).first()
-
-    # If user doesn't exist, create a mock user for testing purposes
-    if not user:
-        try:
-            role = UserRole(role_str)
-            user = User(id=user_id, email=f"{user_id}@example.com", role=role)
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-        except ValueError:
-             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid role '{role_str}' in mock token."
-            )
-
-    if user.role.value != role_str:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"User role mismatch. Token says '{role_str}', DB says '{user.role.value}'."
+    try:
+        # Validate the role from the token
+        role = UserRole(role_str)
+    except ValueError:
+         raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid role '{role_str}' in mock token. Must be one of {', '.join([r.value for r in UserRole])}."
         )
 
-    return user
+    # Create an in-memory User object. No database interaction.
+    mock_user = User(id=user_id, email=f"{user_id}@example.com", role=role)
+
+    return mock_user
 
 # --- ROLE-BASED ACCESS CONTROL DEPENDENCIES ---
 

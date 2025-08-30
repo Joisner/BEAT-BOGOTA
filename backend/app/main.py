@@ -1,8 +1,31 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from .api import events, promotores, etapas, descuentos, payments
 from . import auth
-from .models.user import User
 
 app = FastAPI(title="Beat Bogotá API")
+
+# CORS Middleware
+origins = [
+    "http://localhost",
+    "http://localhost:4200", # Default Angular dev port
+    # Add the production frontend URL here when available
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
+app.include_router(events.router)
+app.include_router(promotores.router)
+app.include_router(etapas.router)
+app.include_router(descuentos.router)
+app.include_router(payments.router)
 
 @app.get("/")
 def read_root():
