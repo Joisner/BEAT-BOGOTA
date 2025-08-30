@@ -38,18 +38,6 @@
       </div>
     </div>
 
-    <!-- Create Event Button -->
-<!--     <div class="flex justify-center mb-12">
-      <a routerLink="/events/new" 
-         class="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25">
-        <div class="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative flex items-center">
-          <lucide-icon name="plus" class="mr-3 h-6 w-6 group-hover:rotate-90 transition-transform duration-300"></lucide-icon>
-          <span>Crear Evento Épico</span>
-        </div>
-      </a>
-    </div> -->
-
     <!-- Events Grid -->
     @if (events$ | async; as events) {
       @if (events.length > 0) {
@@ -69,32 +57,6 @@
                     <img [src]="event.imageUrl" [alt]="event.name" 
                          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    
-                    <!-- Genre Badge -->
-                    <div class="absolute top-4 right-4">
-                      <span class="px-3 py-1 bg-purple-500/80 backdrop-blur-sm text-white text-sm font-bold rounded-full">
-                        {{ event.genre }}
-                      </span>
-                    </div>
-                    
-                    <!-- Featured Badge -->
-                    <div class="absolute top-4 left-4">
-                      <span class="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-black rounded-full uppercase tracking-wider">
-                        Destacado
-                      </span>
-                    </div>
-                    
-                    <!-- Price Badge -->
-                    @if (event.price) {
-                      <div class="absolute bottom-4 right-4">
-                        <span class="px-3 py-1 bg-green-500/80 backdrop-blur-sm text-white text-sm font-bold rounded-full">
-                          {{ event.price.min | currency:'COP':'symbol-narrow':'1.0-0' }}
-                          @if (event.price.max) {
-                            - {{ event.price.max | currency:'COP':'symbol-narrow':'1.0-0' }}
-                          }
-                        </span>
-                      </div>
-                    }
                   </div>
                   
                   <!-- Content -->
@@ -133,12 +95,17 @@
                       </div>
                     }
                     
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center gap-2 flex-wrap">
                       <span class="text-sm font-semibold text-gray-400">{{ event.promotores }}</span>
-                      <a [routerLink]="['/events', event.id]" 
-                         class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25">
-                        Ver Detalles
-                      </a>
+                      <div class="flex gap-2">
+                        <a [routerLink]="['/events', event.id]" 
+                           class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25">
+                          Ver Detalles
+                        </a>
+                        <button (click)="addToCart(event)" class="px-4 py-2 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all duration-300 hover:scale-105">
+                          Agregar al carrito
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

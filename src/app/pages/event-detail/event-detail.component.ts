@@ -5,8 +5,10 @@ import { Observable, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { Event } from '../../core/models/event.model';
 import { EventService } from '../../core/services/event.service';
+import { CartService } from '../../core/services/cart.service';
 import { IconsModule } from '../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-event-detail',
@@ -15,17 +17,21 @@ import { LucideAngularModule } from 'lucide-angular';
     CommonModule,
     RouterModule,
     IconsModule,
-    LucideAngularModule
+    LucideAngularModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './event-detail.component.html',
   styleUrl: './event-detail.component.css'
 })
 export class EventDetailComponent implements OnInit {
   event$!: Observable<Event | null | undefined>;
+  quantity: number = 1;
 
   constructor(
     private route: ActivatedRoute,
-    private eventService: EventService
+    private eventService: EventService,
+    private cartService: CartService
   ) { }
 
   ngOnInit(): void {
@@ -45,5 +51,15 @@ export class EventDetailComponent implements OnInit {
         return of(null);
       })
     );
+  }
+
+  addToCart(event: Event) {
+    this.cartService.addItem({
+      eventId: String(event.id),
+      eventName: event.name,
+      price: event.price?.min || 0,
+      quantity: this.quantity
+    });
+    this.quantity = 1;
   }
 }

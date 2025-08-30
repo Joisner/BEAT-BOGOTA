@@ -1,0 +1,35 @@
+<div class="min-h-screen bg-black relative overflow-hidden">
+	<div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
+	<div class="container mx-auto px-6 py-12 relative z-10">
+		<div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+			<!-- Perfil y configuración -->
+			<div>
+				<div class="bg-black/70 rounded-2xl shadow-lg p-8 border border-purple-900/40 mb-8">
+					<div class="flex flex-col items-center gap-4">
+						<img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="w-24 h-24 rounded-full border-4 border-purple-500 shadow-md">
+						<h2 class="text-3xl font-bold text-purple-300">Juan Pérez</h2>
+						<p class="text-gray-300">{{'Email: juan.perez@email.com'}}</p>
+						<p class="text-gray-300">WhatsApp: +57 300 123 4567</p>
+						<p class="text-gray-300">{{'Redes: @juanpromotor'}}</p>
+						<button class="mt-2 px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700 transition">Editar perfil</button>
+					</div>
+					<hr class="my-6 border-purple-800/30">
+					<h4 class="text-lg font-semibold text-purple-200 mb-2">Configuración</h4>
+					<ul class="space-y-2">
+						<li><button class="w-full px-4 py-2 rounded bg-gray-800 text-gray-200 hover:bg-purple-800/40 transition">Cambiar contraseña</button></li>
+						<li><button class="w-full px-4 py-2 rounded bg-gray-800 text-gray-200 hover:bg-purple-800/40 transition">Preferencias de notificación</button></li>
+					</ul>
+				</div>
+				<!-- Notificaciones -->
+				<app-notifications></app-notifications>
+			</div>
+			<!-- Paneles de datos -->
+			<div class="space-y-8">
+				<app-sales-panel></app-sales-panel>
+				<app-events-list></app-events-list>
+				<app-discounts></app-discounts>
+				<app-commissions></app-commissions>
+			</div>
+		</div>
+	</div>
+</div>

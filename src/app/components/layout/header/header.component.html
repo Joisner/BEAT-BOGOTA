@@ -20,5 +20,14 @@
       <a routerLink="/admin/descuentos" routerLinkActive="text-purple-400" class="hover:text-purple-300 transition-colors">Descuentos</a>
       <a routerLink="/admin/etapas-boleta" routerLinkActive="text-purple-400" class="hover:text-purple-300 transition-colors">Etapas</a>
     </nav> -->
+    <!-- Carrito de compras -->
+    <div class="ml-auto flex items-center">
+      <a [routerLink]="'/cart'" class="relative group">
+        <lucide-icon name="shopping-cart" class="w-7 h-7 text-purple-300 hover:text-pink-400 transition" />
+        <span *ngIf="cartService.getItems().length > 0" class="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full px-2 py-0.5 shadow-lg animate-pulse">
+          {{ cartService.getItems().length }}
+        </span>
+      </a>
+    </div>
   </nav>
 </header>

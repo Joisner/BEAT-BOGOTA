@@ -5,6 +5,9 @@ import { combineLatest, map, Observable, startWith, Subject, takeUntil } from 'r
 import { Event } from '../../core/models/event.model';
 import { EventService } from '../../core/services/event.service';
 import { IconsModule } from '../../core/module/icons.module';
+import { CartService } from '../../core/services/cart.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-events',
@@ -12,7 +15,9 @@ import { IconsModule } from '../../core/module/icons.module';
   imports: [
     CommonModule,
     RouterModule,
-    IconsModule
+    IconsModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
@@ -26,10 +31,33 @@ export class EventsComponent implements OnInit {
   selectedGenre = 'all';
   genres = ['all', 'techno', 'house', 'psytrance', 'trance', 'progressive', 'drum & bass', 'dubstep'];
 
+  // Track quantity per eventId
+  quantities: { [eventId: string]: number } = {};
+
   private destroy$ = new Subject<void>();
   private genreFilter$ = new Subject<string>();
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, private cartService: CartService) { }
+
+  setQuantity(eventId: string, value: number) {
+    this.quantities[eventId] = value;
+  }
+
+  getQuantity(eventId: string): number {
+    return this.quantities[eventId] || 1;
+  }
+
+  addToCart(event: Event) {
+    const quantity = this.getQuantity(String(event.id));
+    this.cartService.addItem({
+      eventId: String(event.id),
+      eventName: event.name,
+      price: event.price?.min || 0,
+      quantity: quantity
+    });
+    // Optionally reset quantity to 1 after adding
+    this.quantities[String(event.id)] = 1;
+  }
 
   ngOnInit(): void {
     // Cargar todos los eventos

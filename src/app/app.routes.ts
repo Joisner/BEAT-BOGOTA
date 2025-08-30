@@ -1,3 +1,4 @@
+// ...existing code...
 import { Routes } from '@angular/router';
 import { EventsComponent } from './pages/events/events.component';
 import { EventFormComponent } from './pages/event-form/event-form.component';
@@ -34,6 +35,22 @@ export const routes: Routes = [
     {path: 'login/admin', component: LoginComponent},
     { path: 'events', component: EventsComponent },
     { path: 'events/:id', component: EventDetailComponent },
+    {
+        path: 'promotor',
+        loadChildren: () => import('./pages/promotor/promotor.routes').then(m => m.PROMOTOR_ROUTES)
+    },
+    {
+        path: 'asistente',
+        loadChildren: () => import('./pages/asistente/asistente.routes').then(m => m.ASISTENTE_ROUTES)
+    },
+    {
+        path: 'cart',
+        loadChildren: () => import('./pages/cart/cart.routes').then(m => m.CART_ROUTES)
+    },
+    {
+        path: 'checkout',
+        loadChildren: () => import('./pages/checkout/checkout.routes').then(m => m.CHECKOUT_ROUTES)
+    },
     { path: '', redirectTo: '/events', pathMatch: 'full' },
     { path: '**', redirectTo: '/events' } // Wildcard route for a 404 page
 ];
