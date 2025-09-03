@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from .api import events, promotores, etapas, descuentos, payments
+from .api import events, promoters, ticket_stages, discounts, payments, users
 from . import auth
 from .models.user import User
 
@@ -23,10 +23,11 @@ app.add_middleware(
 
 # Include routers
 app.include_router(events.router)
-app.include_router(promotores.router)
-app.include_router(etapas.router)
-app.include_router(descuentos.router)
+app.include_router(promoters.router)
+app.include_router(ticket_stages.router)
+app.include_router(discounts.router)
 app.include_router(payments.router)
+app.include_router(users.router)
 
 @app.get("/")
 def read_root():
@@ -34,7 +35,7 @@ def read_root():
 
 # A protected endpoint that requires any authenticated user
 @app.get("/users/me")
-def read_users_me(current_user: User = Depends(auth.get_current_user_mock)):
+def read_users_me(current_user: User = Depends(auth.get_current_user)):
     return {"user_id": current_user.id, "email": current_user.email, "role": current_user.role}
 
 # An admin-only endpoint
@@ -44,5 +45,5 @@ def read_admin_dashboard(current_user: User = Depends(auth.require_admin)):
 
 # A promoter-only endpoint
 @app.get("/promoter/info")
-def read_promoter_info(current_user: User = Depends(auth.require_promotor)):
+def read_promoter_info(current_user: User = Depends(auth.require_promoter)):
     return {"message": f"Welcome Promoter {current_user.email}!", "role": current_user.role}

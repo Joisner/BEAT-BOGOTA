@@ -2,10 +2,10 @@ from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Text, 
 from sqlalchemy.orm import relationship
 from ..database import Base
 
-# Association Table for Event and Promotor (Many-to-Many)
-event_promotores = Table('event_promotores', Base.metadata,
+# Association Table for Event and Promoter (Many-to-Many)
+event_promoters = Table('event_promoters', Base.metadata,
     Column('event_id', Integer, ForeignKey('events.id'), primary_key=True),
-    Column('promotor_id', String, ForeignKey('promotores.id'), primary_key=True)
+    Column('promoter_id', String, ForeignKey('promoters.id'), primary_key=True)
 )
 
 class Event(Base):
@@ -27,6 +27,6 @@ class Event(Base):
     capacity = Column(Integer)
     featured = Column(Boolean, default=False)
 
-    promotores = relationship("Promotor", secondary=event_promotores, back_populates="events")
-    etapas = relationship("EtapaBoleta", back_populates="event")
+    promoters = relationship("Promoter", secondary=event_promoters, back_populates="events")
+    ticket_stages = relationship("TicketStage", back_populates="event")
     # Add other relationships as needed, e.g., transactions

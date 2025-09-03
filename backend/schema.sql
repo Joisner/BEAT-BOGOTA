@@ -27,29 +27,29 @@ CREATE TABLE users (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE etapas_boletas (
-	id INTEGER NOT NULL IDENTITY,
-	event_id INTEGER NOT NULL,
-	nombre VARCHAR(max) NOT NULL,
-	[fechaInicio] DATETIME NOT NULL,
-	[fechaFin] DATETIME NOT NULL,
-	precio FLOAT NOT NULL,
-	disponibilidad INTEGER NOT NULL,
-	activa BIT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY(event_id) REFERENCES events (id)
-);
-
-CREATE TABLE promotores (
+CREATE TABLE promoters (
 	id VARCHAR(max) NOT NULL,
 	user_id VARCHAR(max) NOT NULL,
-	nombre VARCHAR(max) NOT NULL,
-	telefono VARCHAR(max) NULL,
+	name VARCHAR(max) NOT NULL,
+	phone VARCHAR(max) NULL,
 	whatsapp VARCHAR(max) NULL,
-	[perfilUrl] VARCHAR(max) NULL,
-	habilitado BIT NULL,
+	profile_url VARCHAR(max) NULL,
+	enabled BIT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY(user_id) REFERENCES users (id)
+);
+
+CREATE TABLE ticket_stages (
+	id INTEGER NOT NULL IDENTITY,
+	event_id INTEGER NOT NULL,
+	name VARCHAR(max) NOT NULL,
+	start_date DATETIME NOT NULL,
+	end_date DATETIME NOT NULL,
+	price FLOAT NOT NULL,
+	availability INTEGER NOT NULL,
+	active BIT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY(event_id) REFERENCES events (id)
 );
 
 CREATE TABLE transactions (
@@ -67,26 +67,26 @@ CREATE TABLE transactions (
 	FOREIGN KEY(user_id) REFERENCES users (id)
 );
 
-CREATE TABLE descuentos (
+CREATE TABLE discounts (
 	id INTEGER NOT NULL IDENTITY,
-	codigo VARCHAR(max) NOT NULL,
-	descripcion VARCHAR(max) NULL,
-	tipo VARCHAR(8) NOT NULL,
-	valor FLOAT NOT NULL,
-	activo BIT NULL,
-	[fechaInicio] DATETIME NULL,
-	[fechaFin] DATETIME NULL,
-	promotor_id VARCHAR(max) NULL,
-	etapa_id INTEGER NULL,
+	code VARCHAR(max) NOT NULL,
+	description VARCHAR(max) NULL,
+	type VARCHAR(8) NOT NULL,
+	value FLOAT NOT NULL,
+	active BIT NULL,
+	start_date DATETIME NULL,
+	end_date DATETIME NULL,
+	promoter_id VARCHAR(max) NULL,
+	ticket_stage_id INTEGER NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY(promotor_id) REFERENCES promotores (id),
-	FOREIGN KEY(etapa_id) REFERENCES etapas_boletas (id)
+	FOREIGN KEY(promoter_id) REFERENCES promoters (id),
+	FOREIGN KEY(ticket_stage_id) REFERENCES ticket_stages (id)
 );
 
-CREATE TABLE event_promotores (
+CREATE TABLE event_promoters (
 	event_id INTEGER NOT NULL,
-	promotor_id VARCHAR(max) NOT NULL,
-	PRIMARY KEY (event_id, promotor_id),
+	promoter_id VARCHAR(max) NOT NULL,
+	PRIMARY KEY (event_id, promoter_id),
 	FOREIGN KEY(event_id) REFERENCES events (id),
-	FOREIGN KEY(promotor_id) REFERENCES promotores (id)
+	FOREIGN KEY(promoter_id) REFERENCES promoters (id)
 );

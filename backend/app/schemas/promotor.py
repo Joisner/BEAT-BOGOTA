@@ -1,24 +1,24 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-class PromotorBase(BaseModel):
-    nombre: str
-    telefono: Optional[str] = None
+class PromoterBase(BaseModel):
+    name: str
+    phone: Optional[str] = None
     whatsapp: Optional[str] = None
-    perfilUrl: Optional[str] = None
-    habilitado: bool = True
+    profile_url: Optional[str] = None
+    enabled: bool = True
 
-class PromotorCreate(PromotorBase):
-    user_id: str # The Firebase UID of the user to be a promoter
+class PromoterCreate(PromoterBase):
+    user_email: EmailStr
 
-class PromotorUpdate(BaseModel):
-    nombre: Optional[str] = None
-    telefono: Optional[str] = None
+class PromoterUpdate(BaseModel):
+    name: Optional[str] = None
+    phone: Optional[str] = None
     whatsapp: Optional[str] = None
-    perfilUrl: Optional[str] = None
-    habilitado: Optional[bool] = None
+    profile_url: Optional[str] = None
+    enabled: Optional[bool] = None
 
-class Promotor(PromotorBase):
+class Promoter(PromoterBase):
     id: str
     user_id: str
 

@@ -2,16 +2,16 @@ from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Foreig
 from sqlalchemy.orm import relationship
 from ..database import Base
 
-class EtapaBoleta(Base):
-    __tablename__ = "etapas_boletas"
+class TicketStage(Base):
+    __tablename__ = "ticket_stages"
 
     id = Column(Integer, primary_key=True, index=True)
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
-    nombre = Column(String, nullable=False)
-    fechaInicio = Column(DateTime, nullable=False)
-    fechaFin = Column(DateTime, nullable=False)
-    precio = Column(Float, nullable=False)
-    disponibilidad = Column(Integer, nullable=False)
-    activa = Column(Boolean, default=True)
+    name = Column(String, nullable=False)
+    start_date = Column(DateTime, nullable=False)
+    end_date = Column(DateTime, nullable=False)
+    price = Column(Float, nullable=False)
+    availability = Column(Integer, nullable=False)
+    active = Column(Boolean, default=True)
 
-    event = relationship("Event", back_populates="etapas")
+    event = relationship("Event", back_populates="ticket_stages")

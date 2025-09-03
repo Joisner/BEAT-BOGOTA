@@ -2,26 +2,26 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class EtapaBoletaBase(BaseModel):
-    nombre: str
-    fechaInicio: datetime
-    fechaFin: datetime
-    precio: float
-    disponibilidad: int
-    activa: bool = True
+class TicketStageBase(BaseModel):
+    name: str
+    start_date: datetime
+    end_date: datetime
+    price: float
+    availability: int
+    active: bool = True
 
-class EtapaBoletaCreate(EtapaBoletaBase):
+class TicketStageCreate(TicketStageBase):
     event_id: int
 
-class EtapaBoletaUpdate(BaseModel):
-    nombre: Optional[str] = None
-    fechaInicio: Optional[datetime] = None
-    fechaFin: Optional[datetime] = None
-    precio: Optional[float] = None
-    disponibilidad: Optional[int] = None
-    activa: Optional[bool] = None
+class TicketStageUpdate(BaseModel):
+    name: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    price: Optional[float] = None
+    availability: Optional[int] = None
+    active: Optional[bool] = None
 
-class EtapaBoleta(EtapaBoletaBase):
+class TicketStage(TicketStageBase):
     id: int
     event_id: int
 

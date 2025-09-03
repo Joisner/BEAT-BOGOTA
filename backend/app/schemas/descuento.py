@@ -1,34 +1,34 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-from app.models.descuento import DescuentoTipo
+from app.models.descuento import DiscountType
 
-class DescuentoBase(BaseModel):
-    codigo: str
-    descripcion: Optional[str] = None
-    tipo: DescuentoTipo
-    valor: float
-    activo: bool = True
-    fechaInicio: Optional[datetime] = None
-    fechaFin: Optional[datetime] = None
-    promotor_id: Optional[str] = None
-    etapa_id: Optional[int] = None
+class DiscountBase(BaseModel):
+    code: str
+    description: Optional[str] = None
+    type: DiscountType
+    value: float
+    active: bool = True
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    promoter_id: Optional[str] = None
+    ticket_stage_id: Optional[int] = None
 
-class DescuentoCreate(DescuentoBase):
+class DiscountCreate(DiscountBase):
     pass
 
-class DescuentoUpdate(BaseModel):
-    codigo: Optional[str] = None
-    descripcion: Optional[str] = None
-    tipo: Optional[DescuentoTipo] = None
-    valor: Optional[float] = None
-    activo: Optional[bool] = None
-    fechaInicio: Optional[datetime] = None
-    fechaFin: Optional[datetime] = None
-    promotor_id: Optional[str] = None
-    etapa_id: Optional[int] = None
+class DiscountUpdate(BaseModel):
+    code: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[DiscountType] = None
+    value: Optional[float] = None
+    active: Optional[bool] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    promoter_id: Optional[str] = None
+    ticket_stage_id: Optional[int] = None
 
-class Descuento(DescuentoBase):
+class Discount(DiscountBase):
     id: int
 
     class Config:

@@ -64,7 +64,7 @@ def test_create_event():
 
 def test_create_event_unauthorized():
     # Use a non-admin token
-    promoter_headers = {"Authorization": "Bearer testpromoter:promotor"}
+    promoter_headers = {"Authorization": "Bearer testpromoter:promoter"}
 
     event_data = {
         "name": "Unauthorized Event",

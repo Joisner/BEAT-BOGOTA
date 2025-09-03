@@ -5,7 +5,7 @@ from ..database import Base
 
 class UserRole(enum.Enum):
     ADMIN = "admin"
-    PROMOTOR = "promotor"
+    PROMOTER = "promoter"
     ASSISTANT = "assistant"
 
 class User(Base):
@@ -15,4 +15,4 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     role = Column(Enum(UserRole), nullable=False)
 
-    promotor = relationship("Promotor", back_populates="user", uselist=False)
+    promoter = relationship("Promoter", back_populates="user", uselist=False)
