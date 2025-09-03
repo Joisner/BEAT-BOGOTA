@@ -1,4 +1,3 @@
-
 <aside class="admin-sidebar" [class.collapsed]="isCollapsed">
   <button class="sidebar-toggle" (click)="onToggleClick()" [attr.aria-label]="isCollapsed ? 'Expandir menú' : 'Colapsar menú'">
     <lucide-icon [name]="isCollapsed ? 'chevron-right' : 'chevron-left'"></lucide-icon>
@@ -6,21 +5,26 @@
   <nav>
     <ul>
       <li *ngFor="let item of menuItems; trackBy: trackByName">
+        <!-- Item sin hijos -->
         <a *ngIf="!item.children" [routerLink]="item.href" routerLinkActive="active" [class.active]="isMenuActive(item)">
           <lucide-icon [name]="getIconName(item.icon)" class="sidebar-icon"></lucide-icon>
           <span class="sidebar-label" *ngIf="!isCollapsed">{{ item.name }}</span>
           <span *ngIf="item.badge && !isCollapsed" class="sidebar-badge">{{ item.badge }}</span>
         </a>
-        <!-- Submenú (opcional, si hay hijos) -->
-        <div *ngIf="item.children">
-          <a href="#" (click)="toggleSubmenu(item); $event.preventDefault()" [class.active]="isMenuActive(item)">
+        
+        <!-- Item con hijos (submenú) -->
+        <div *ngIf="item.children" class="menu-item-with-children" [class.expanded]="item.expanded">
+          <a href="#" (click)="toggleSubmenu($event, item)" class="menu-item" [class.active]="isMenuActive(item)" [attr.aria-expanded]="item.expanded">
             <lucide-icon [name]="getIconName(item.icon)" class="sidebar-icon"></lucide-icon>
             <span class="sidebar-label" *ngIf="!isCollapsed">{{ item.name }}</span>
+            <span *ngIf="item.badge && !isCollapsed" class="sidebar-badge">{{ item.badge }}</span>
             <lucide-icon [name]="item.expanded ? 'chevron-down' : 'chevron-right'" class="submenu-arrow" *ngIf="!isCollapsed"></lucide-icon>
           </a>
-          <ul *ngIf="item.expanded && !isCollapsed" class="submenu">
-            <li *ngFor="let child of item.children; trackBy: trackByName">
-              <a [routerLink]="child.href" routerLinkActive="active" [class.active]="isMenuActive(child)">
+          
+          <!-- Submenú desplegable -->
+          <ul class="submenu" *ngIf="!isCollapsed">
+            <li *ngFor="let child of item.children; trackBy: trackByName" class="submenu-item">
+              <a [routerLink]="child.href" routerLinkActive="active" [class.active]="isMenuActive(child)" class="submenu-link">
                 <lucide-icon [name]="getIconName(child.icon)" class="sidebar-icon"></lucide-icon>
                 <span class="sidebar-label">{{ child.name }}</span>
                 <span *ngIf="child.badge" class="sidebar-badge">{{ child.badge }}</span>

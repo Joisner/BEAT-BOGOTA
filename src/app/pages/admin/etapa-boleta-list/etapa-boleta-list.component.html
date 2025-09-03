@@ -1,60 +1,133 @@
-<div class="min-h-screen bg-gray-900 text-white p-8">
+<div class="min-h-screen bg-gray-900 text-white p-4 sm:p-8">
   <div class="max-w-7xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-4xl font-black text-purple-400">Etapas de Boleta</h1>
-      <a routerLink="/admin/etapas-boleta/new"
-        class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:scale-105 transition-transform duration-300 hover:shadow-2xl hover:shadow-purple-500/25">
-        <lucide-icon name="plus" class="mr-2 h-6 w-6"></lucide-icon>
-        Crear Etapa
-      </a>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <h1 class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+        Etapas de Boleta
+      </h1>
+      <button 
+        (click)="nuevaEtapa()"
+        class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:scale-105 transition-transform duration-300 hover:shadow-2xl hover:shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+        [disabled]="loading">
+        <lucide-icon name="plus" class="mr-2 h-5 w-5"></lucide-icon>
+        <span class="hidden sm:inline">Nueva Etapa</span>
+        <span class="sm:hidden">Nueva</span>
+      </button>
     </div>
+    
+    <!-- Error Message -->
+    <div *ngIf="error" class="mb-6 p-4 bg-red-900/50 border border-red-500/50 rounded-lg">
+      <div class="flex items-center">
+        <lucide-icon name="alert-triangle" class="h-5 w-5 text-red-400 mr-2"></lucide-icon>
+        <p class="text-red-200">{{ error }}</p>
+      </div>
+    </div>
+
     <div class="bg-gray-800/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl shadow-lg overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full text-sm text-left text-gray-300">
           <thead class="text-xs text-purple-300 uppercase bg-gray-900/80">
             <tr>
-              <th class="px-6 py-4">Nombre</th>
-              <th class="px-6 py-4">Fecha Inicio</th>
-              <th class="px-6 py-4">Fecha Fin</th>
-              <th class="px-6 py-4">Precio</th>
-              <th class="px-6 py-4">Disponibilidad</th>
-              <th class="px-6 py-4">Activa</th>
-              <th class="px-6 py-4 text-center">Acciones</th>
+              <th class="px-4 sm:px-6 py-3">Nombre</th>
+              <th class="px-4 sm:px-6 py-3">Fechas</th>
+              <th class="px-4 sm:px-6 py-3">Precio</th>
+              <th class="px-4 sm:px-6 py-3">Disponibilidad</th>
+              <th class="px-4 sm:px-6 py-3">Estado</th>
+              <th class="px-4 sm:px-6 py-3 text-center">Acciones</th>
             </tr>
           </thead>
-          <tbody *ngIf="etapas.length; else loading">
-            <tr *ngFor="let e of etapas" class="border-b border-gray-700 hover:bg-gray-800/70 transition-colors duration-200">
-              <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ e.nombre }}</td>
-              <td class="px-6 py-4">{{ e.fechaInicio | date:'shortDate' }}</td>
-              <td class="px-6 py-4">{{ e.fechaFin | date:'shortDate' }}</td>
-              <td class="px-6 py-4">{{ e.precio | currency:'COP':'symbol' }}</td>
-              <td class="px-6 py-4">{{ e.disponibilidad }}</td>
-              <td class="px-6 py-4">{{ e.activa ? 'Sí' : 'No' }}</td>
-              <td class="px-6 py-4 text-center">
-                <a [routerLink]="['/admin/etapas-boleta/edit', e.id]" class="text-cyan-400 hover:text-cyan-300 mr-4 font-semibold transition-colors duration-200">
-                  <lucide-icon name="pencil" class="inline-block h-5 w-5"></lucide-icon>
-                  Editar
-                </a>
-                <button (click)="eliminarEtapa(e.id)" class="text-pink-500 hover:text-pink-400 font-semibold transition-colors duration-200">
-                  <lucide-icon name="trash-2" class="inline-block h-5 w-5"></lucide-icon>
-                  Eliminar
-                </button>
+          <tbody>
+            <!-- Loading State -->
+            <tr *ngIf="loading">
+              <td colspan="6" class="px-6 py-12 text-center">
+                <div class="flex flex-col items-center justify-center space-y-2">
+                  <lucide-icon name="loader-2" class="h-8 w-8 animate-spin text-purple-400"></lucide-icon>
+                  <p class="text-gray-400">Cargando etapas...</p>
+                </div>
               </td>
             </tr>
-            <tr *ngIf="etapas.length === 0">
-              <td colspan="7" class="px-6 py-12 text-center text-gray-400">
-                No hay etapas para mostrar.
+
+            <!-- Empty State -->
+            <tr *ngIf="!loading && etapas.length === 0">
+              <td colspan="6" class="px-6 py-12 text-center">
+                <div class="flex flex-col items-center justify-center space-y-2">
+                  <lucide-icon name="calendar-x" class="h-10 w-10 text-gray-500"></lucide-icon>
+                  <p class="text-gray-400">No hay etapas para mostrar</p>
+                  <button 
+                    (click)="nuevaEtapa()"
+                    class="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200">
+                    Crear Primera Etapa
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Data Rows -->
+            <tr 
+              *ngFor="let e of etapas" 
+              class="border-b border-gray-700 hover:bg-gray-800/70 transition-colors duration-200">
+              <td class="px-4 sm:px-6 py-4 font-medium text-white">
+                <div class="font-semibold">{{ e.nombre }}</div>
+                <div class="text-xs text-gray-400 mt-1">ID: {{ e.id }}</div>
+              </td>
+              <td class="px-4 sm:px-6 py-4">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <lucide-icon name="calendar" class="h-4 w-4 mr-1 text-purple-400"></lucide-icon>
+                    <span>{{ e.fechaInicio | date:'shortDate' }}</span>
+                  </div>
+                  <div class="flex items-center text-sm text-gray-400">
+                    <lucide-icon name="calendar-x" class="h-3 w-3 mr-1 text-gray-500"></lucide-icon>
+                    {{ e.fechaFin | date:'shortDate' }}
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 sm:px-6 py-4 font-medium">
+                {{ e.precio | currency:'COP':'symbol':'1.0-0' }}
+              </td>
+              <td class="px-4 sm:px-6 py-4">
+                <span class="px-2 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-green-900/50 text-green-300': e.disponibilidad > 50,
+                    'bg-yellow-900/50 text-yellow-300': e.disponibilidad > 10 && e.disponibilidad <= 50,
+                    'bg-red-900/50 text-red-300': e.disponibilidad <= 10
+                  }">
+                  {{ e.disponibilidad }} disponibles
+                </span>
+              </td>
+              <td class="px-4 sm:px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-green-900/50 text-green-300': e.activa,
+                    'bg-gray-800 text-gray-400': !e.activa
+                  }">
+                  <span class="w-2 h-2 rounded-full mr-1.5"
+                    [ngClass]="{
+                      'bg-green-400': e.activa,
+                      'bg-gray-500': !e.activa
+                    }"></span>
+                  {{ e.activa ? 'Activa' : 'Inactiva' }}
+                </span>
+              </td>
+              <td class="px-4 sm:px-6 py-4">
+                <div class="flex flex-col sm:flex-row gap-2 justify-center">
+                  <button 
+                    (click)="editarEtapa(e.id)"
+                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors duration-200"
+                    [disabled]="loading">
+                    <lucide-icon name="pencil" class="h-4 w-4 mr-1"></lucide-icon>
+                    <span class="hidden sm:inline">Editar</span>
+                  </button>
+                  <button 
+                    (click)="eliminarEtapa(e.id)" 
+                    class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-colors duration-200"
+                    [disabled]="loading">
+                    <lucide-icon name="trash-2" class="h-4 w-4 mr-1"></lucide-icon>
+                    <span class="hidden sm:inline">Eliminar</span>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
-          <ng-template #loading>
-            <tr>
-              <td colspan="7" class="px-6 py-12 text-center text-gray-400">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-500 border-t-transparent"></div>
-                <p class="mt-2">Cargando etapas...</p>
-              </td>
-            </tr>
-          </ng-template>
         </table>
       </div>
     </div>

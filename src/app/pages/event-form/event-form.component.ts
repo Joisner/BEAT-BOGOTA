@@ -44,13 +44,24 @@ export class EventFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    debugger;
     this.initForm();
     this.checkMode();
-    this.promotorService.getPromotores().subscribe(promotores => {
-      this.promotores = promotores;
+    this.promotorService.getPromotores().subscribe({
+      next: (promotores) => {
+        this.promotores = promotores;
+      },
+      error: (error) => {
+        console.error(`${`No fue posible cargar promotores ${error}`}`)
+      }
     });
-    this.etapaBoletaService.getEtapas().subscribe(etapas => {
-      this.etapas = etapas;
+    this.etapaBoletaService.getEtapas(this.eventId!.toString()).subscribe({
+      next: (etapas) => {
+        this.etapas = etapas;
+      },
+      error: (error) => {
+        console.error(`${`No fue posible cargar etapas ${error}`}`)
+      }
     });
   }
 
@@ -96,6 +107,7 @@ export class EventFormComponent implements OnInit {
   private loadEventData(id: number): void {
     this.eventService.getEvent(id).subscribe({
       next: (event) => {
+        debugger;
         if (event) {
           this.eventForm.patchValue({
             ...event,
@@ -162,9 +174,23 @@ export class EventFormComponent implements OnInit {
       tags: tags.length > 0 ? tags : undefined
     };
 
+    this.eventService.addEvent(eventData as Event).subscribe({
+      next: (result) => {
+        debugger;
+        this.showSuccessMessage();
+        setTimeout(() => {
+          this.router.navigate(['/admin/events']);
+        }, 1500);
+      },
+      error: (err) => {
+        console.error('Error saving event:', err);
+        this.showErrorMessage();
+        this.isSubmitting = false;
+      }
+    });
     const operation = this.editMode && this.eventId
       ? this.eventService.updateEvent(this.eventId, eventData)
-      : this.eventService.addEvent(eventData as Omit<Event, 'id'>);
+      : this.eventService.addEvent(eventData as Event);
 
     operation.subscribe({
       next: (result) => {

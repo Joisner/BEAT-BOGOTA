@@ -19,8 +19,13 @@ export class PromotorListComponent implements OnInit {
     constructor(private promotorService: PromotorService) { }
 
     ngOnInit(): void {
-        this.promotorService.getPromotores().subscribe(promotores => {
-            this.promotores = promotores;
+        this.promotorService.getPromotores().subscribe({
+            next: (promotores) => {
+                this.promotores = promotores;
+            },
+            error: (error) => {
+                console.error(`${`No fue posible cargar promotores ${error}`}`)
+            }
         });
     }
 

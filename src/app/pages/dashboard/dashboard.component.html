@@ -1,0 +1,79 @@
+<div class="min-h-screen bg-gray-900 text-white">
+  <!-- Navigation -->
+  <nav class="bg-gray-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-purple-400">BEAT BOGOTÁ</span>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="ml-4 flex items-center md:ml-6">
+            <div class="ml-3 relative">
+              <div>
+                <button type="button" class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-expanded="false" aria-haspopup="true">
+                  <span class="sr-only">Open user menu</span>
+                  <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
+                    {{ currentUser?.email?.charAt(0)?.toUpperCase() || 'U' }}
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center">
+        <h1 class="text-3xl font-bold text-white mb-4">Bienvenido a BEAT BOGOTÁ</h1>
+        
+        <div *ngIf="loading" class="flex justify-center my-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
+
+        <div *ngIf="!loading && currentUser" class="mt-6">
+          <div class="bg-gray-800 rounded-lg p-6 max-w-md mx-auto">
+            <div class="flex items-center justify-center mb-4">
+              <div class="h-20 w-20 rounded-full bg-purple-600 flex items-center justify-center text-white text-3xl font-bold">
+                {{ currentUser.email.charAt(0).toUpperCase() || 'U' }}
+              </div>
+            </div>
+            <h2 class="text-xl font-semibold text-white">{{ currentUser.email }}</h2>
+            <p class="text-gray-400 mt-1">Rol: {{ currentUser.role }}</p>
+            
+            <div class="mt-6 pt-6 border-t border-gray-700">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-700/50 p-4 rounded-lg">
+                  <p class="text-sm text-gray-400">Tipo de Usuario</p>
+                  <p class="font-medium text-white">{{ currentUser.is_admin ? 'Administrador' : 'Usuario' }}</p>
+                </div>
+                <div class="bg-gray-700/50 p-4 rounded-lg">
+                  <p class="text-sm text-gray-400">Estado</p>
+                  <p class="font-medium text-green-400">Activo</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button (click)="logout()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!loading && !currentUser" class="mt-6">
+          <p class="text-red-400">No se pudo cargar la información del usuario.</p>
+          <button (click)="logout()" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+            Volver al inicio de sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

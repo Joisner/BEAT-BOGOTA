@@ -60,9 +60,10 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    debugger;
     // Cargar todos los eventos
     this.events$ = this.eventService.getEvents();
-
+    debugger;
     // Configurar eventos destacados
     this.featuredEvents$ = this.events$.pipe(
       map(events => events.filter(event => event.featured))

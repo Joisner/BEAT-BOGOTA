@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { Event } from '../models/event.model';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { environment } from '../../env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
+  environment = environment;
+  http = inject(HttpClient);
   private events: Event[] = [
     {
       id: 1,
@@ -84,7 +88,16 @@ export class EventService {
   constructor() { }
 
   getEvents(): Observable<Event[]> {
-    return of(this.events);
+    // First try to fetch from the API
+    return this.http.get<Event[]>(`${environment.eventService}`).pipe(
+      // If successful, use the API data
+      map((response: any) => response.data || response),
+      // If there's an error, fall back to mock data
+      catchError(error => {
+        console.warn('Failed to fetch events from API, using mock data', error);
+        return of(this.events);
+      })
+    );
   }
 
   getFeaturedEvents(): Observable<Event[]> {
@@ -92,38 +105,36 @@ export class EventService {
   }
 
   getEvent(id: number): Observable<Event | undefined> {
-    const event = this.events.find(e => e.id === id);
-    return event ? of(event) : throwError(() => new Error('Event not found'));
+    debugger;
+    return this.http.get(`${environment.eventService}/${id}`).pipe(
+      map((response: any) => response.data)
+    )
   }
-
-  addEvent(eventData: Omit<Event, 'id'>): Observable<Event> {
-    const newEvent: Event = {
-      id: this.events.length > 0 ? Math.max(...this.events.map(e => e.id)) + 1 : 1,
-      ...eventData
-    };
-    this.events.push(newEvent);
-    return of(newEvent);
+private get bearerToken(): { headers: { [key: string]: string } } {
+  const token = localStorage.getItem('auth_token'); // Get the token from your auth service or storage
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  };
+}
+  addEvent(eventData: Event): Observable<Event> {
+    return this.http.post(`${environment.eventService}`, eventData, this.bearerToken).pipe(
+      map((response: any) => response.data)
+    )
   }
 
   deleteEvent(id: number): Observable<void> {
-    const eventIndex = this.events.findIndex(e => e.id === id);
-    if (eventIndex > -1) {
-      this.events.splice(eventIndex, 1);
-      return of(undefined);
-    } else {
-      return throwError(() => new Error('Event not found'));
-    }
+    return this.http.delete(`${environment.eventService}/${id}`).pipe(
+      map((response: any) => response.data)
+    )
   }
 
   updateEvent(id: number, eventData: Partial<Event>): Observable<Event> {
-    const eventIndex = this.events.findIndex(e => e.id === id);
-    if (eventIndex > -1) {
-      const updatedEvent = { ...this.events[eventIndex], ...eventData };
-      this.events[eventIndex] = updatedEvent;
-      return of(updatedEvent);
-    } else {
-      return throwError(() => new Error('Event not found'));
-    }
+    return this.http.put(`${environment.eventService}/${id}`, eventData).pipe(
+      map((response: any) => response.data)
+    )
   }
 
   getEventsByGenre(genre: string): Observable<Event[]> {

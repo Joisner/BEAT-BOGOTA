@@ -1,29 +1,52 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Promotor } from '../models/promotor.model';
+import { environment } from '../../env/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PromotorService {
-  private promotores: Promotor[] = [
-    {
-      id: '1',
-      nombre: 'Juan Pérez',
-      telefono: '3001234567',
-      whatsapp: 'https://wa.me/573001234567',
-      perfilUrl: 'https://example.com/juan',
-      habilitado: true
-    },
-    {
-      id: '2',
-      nombre: 'Ana Gómez',
-      telefono: '3009876543',
-      whatsapp: 'https://wa.me/573009876543',
-      perfilUrl: 'https://example.com/ana',
-      habilitado: true
-    }
-  ];
+  environment = environment;
 
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Obtiene todos los promotores
+   */
   getPromotores(): Observable<Promotor[]> {
-    return of(this.promotores.filter(p => p.habilitado));
+    return this.http.get<Promotor[]>(this.environment.promoterService);
+  }
+
+  /**
+   * Obtiene un promotor por su ID
+   * @param id ID del promotor
+   */
+  getPromotor(id: string): Observable<Promotor> {
+    return this.http.get<Promotor>(`${this.environment.promoterService}/${id}`);
+  }
+
+  /**
+   * Crea un nuevo promotor
+   * @param promotor Datos del promotor a crear
+   */
+  createPromotor(promotor: Omit<Promotor, 'id'>): Observable<Promotor> {
+    return this.http.post<Promotor>(this.environment.promoterService, promotor);
+  }
+
+  /**
+   * Actualiza un promotor existente
+   * @param id ID del promotor a actualizar
+   * @param promotor Datos actualizados del promotor
+   */
+  updatePromotor(id: string, promotor: Partial<Promotor>): Observable<Promotor> {
+    return this.http.put<Promotor>(`${this.environment.promoterService}/${id}`, promotor);
+  }
+
+  /**
+   * Elimina un promotor
+   * @param id ID del promotor a eliminar
+   */
+  deletePromotor(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.environment.promoterService}/${id}`);
   }
 }

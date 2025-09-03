@@ -34,7 +34,7 @@ export class EventListComponent implements OnInit {
     if (!ids || !Array.isArray(ids)) return '';
     return this.promotores
       .filter(p => ids.includes(p.id))
-      .map(p => p.nombre)
+      .map(p => p.name)
       .join(', ');
   }
 

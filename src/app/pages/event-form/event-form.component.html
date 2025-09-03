@@ -258,7 +258,7 @@
             </label>
             <select id="promotores" formControlName="promotores" multiple
               class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
-              <option *ngFor="let promotor of promotores" [value]="promotor.id">{{ promotor.nombre }}</option>
+              <option *ngFor="let promotor of promotores" [value]="promotor.user_id">{{ promotor.name }}</option>
             </select>
             <p class="mt-2 text-gray-400 text-sm">Selecciona uno o varios promotores responsables del evento.</p>
             @if (eventForm.get('promotores')?.invalid && eventForm.get('promotores')?.touched) {

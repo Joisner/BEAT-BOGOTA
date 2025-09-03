@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppUser } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,38 +12,62 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   error: string = '';
+  loading = false;
+  returnUrl: string = '/dashboard';
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  login() {
-    this.error = '';
-    this.authService.login(this.email, this.password)
-      .then(user => {
-        // Redirige o realiza acciones tras el login exitoso
-        this.router.navigate(['/']);
-      })
-      .catch(err => {
-        this.error = 'Usuario o contraseña incorrectos';
-      });
+  ngOnInit() {
+    debugger;
+    // Get return url from route parameters or default to '/dashboard'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    
+    // Redirect if already logged in
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate([this.returnUrl]);
+    }
   }
 
-  loginWithGoogle() {
+  async onSubmit() {
+    if (!this.email || !this.password) {
+      this.error = 'Por favor ingrese su correo y contraseña';
+      return;
+    }
+
+    this.loading = true;
     this.error = '';
-    this.authService.loginWithGoogle()
-      .then(user => {
-        debugger;
-        localStorage.setItem('auth_firebase', JSON.stringify(user.providerData))
-        this.router.navigate(['/admin/events']);
-      })
-      .catch(err => {
-        this.error = 'No se pudo iniciar sesión con Google';
-      });
+
+    try {
+      await this.authService.login(this.email, this.password);
+      this.router.navigate([this.returnUrl]);
+    } catch (error: any) {
+      this.error = error.message || 'Error al iniciar sesión. Por favor intente de nuevo.';
+      console.error('Login error:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onGoogleLogin() {
+    this.loading = true;
+    this.error = '';
+    debugger;
+    try {
+      await this.authService.loginWithGoogle();
+      this.router.navigate([this.returnUrl]);
+    } catch (error: any) {
+      this.error = error.message || 'Error al iniciar sesión con Google. Por favor intente de nuevo.';
+      console.error('Google login error:', error);
+    } finally {
+      this.loading = false;
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { LucideAngularModule, Plus, Calendar, MapPin, ChevronLeft, Ticket, Phone, Link, Info, FileText, DollarSign, Users, Tag, Sparkles, CheckCircle, Star, Trash2, Pencil, Clock, Music, Headphones, Share2, CalendarPlus, CalendarDays, Percent, Layers, Home, ShoppingCart, Menu, User } from 'lucide-angular';
+import { LucideAngularModule, Plus, Calendar, MapPin, ChevronLeft, Ticket, Phone, Link, Info, FileText, DollarSign, Users, Tag, Sparkles, CheckCircle, Star, Trash2, Pencil, Clock, Music, Headphones, Share2, CalendarPlus, CalendarDays, Percent, Layers, Home, ShoppingCart, Menu, User, ChevronRight, Shield, BarChart3, LineChart, UserCircle, TrendingUp, Settings, UsersRound, Lock, Bell } from 'lucide-angular';
 
 @NgModule({
   imports: [
@@ -32,7 +32,18 @@ import { LucideAngularModule, Plus, Calendar, MapPin, ChevronLeft, Ticket, Phone
       Home,
       ShoppingCart,
       Menu,
-      User
+      User,
+      ChevronRight,
+      Shield,
+      BarChart3,
+      LineChart,
+      UserCircle,
+      TrendingUp,
+      Settings,
+      UsersRound,
+      Lock,
+      Bell,
+      
     })
   ],
   exports: [LucideAngularModule]

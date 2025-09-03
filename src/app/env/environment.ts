@@ -1,4 +1,8 @@
 export const environment = {
+    eventService: 'http://localhost:8000/events',
+    userService: 'http://localhost:8000/users',
+    promoterService: 'http://localhost:8000/promoters',
+    discountsService: 'http://localhost:8000/discounts',
     firebaseConfig: {
         apiKey: "AIzaSyDQtfMAV1YgyZQp5uSsOpb3Yl78qpwYIGM",
         authDomain: "beat-bogota.firebaseapp.com",

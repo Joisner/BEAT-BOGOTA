@@ -1,8 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
   @apply bg-black text-white;
+}
+
+/* Custom Toastr styles to match the app theme */
+.toast-container .ngx-toastr {
+  @apply bg-gray-800 bg-opacity-90 border-l-4 border-blue-500 rounded-lg shadow-lg;
+  color: white;
+  padding: 15px 15px 15px 50px;
+  width: 300px;
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  background-size: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.toast-success {
+  @apply border-green-500;
+}
+
+.toast-error {
+  @apply border-red-500;
+}
+
+.toast-info {
+  @apply border-blue-500;
+}
+
+.toast-warning {
+  @apply border-yellow-500;
+}
+
+.toast-title {
+  @apply font-bold text-white;
+}
+
+.toast-message {
+  @apply text-gray-200;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
 }

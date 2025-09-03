@@ -1,39 +1,52 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Descuento } from '../models/descuento.model';
+import { environment } from '../../env/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DescuentoService {
-  private descuentos: Descuento[] = [
-    {
-      id: '1',
-      codigo: 'BEAT10',
-      descripcion: '10% de descuento general',
-      tipo: 'general',
-      valor: 10,
-      activo: true
-    },
-    {
-      id: '2',
-      codigo: 'PROMOANA',
-      descripcion: '15% para clientes de Ana',
-      tipo: 'promotor',
-      valor: 15,
-      activo: true,
-      promotorId: '2'
-    },
-    {
-      id: '3',
-      codigo: 'VIP20',
-      descripcion: '20% en entradas VIP',
-      tipo: 'entrada',
-      valor: 20,
-      activo: false,
-      entradaTipo: 'VIP'
-    }
-  ];
+  environment = environment;
 
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Obtiene todos los descuentos
+   */
   getDescuentos(): Observable<Descuento[]> {
-    return of(this.descuentos);
+    return this.http.get<Descuento[]>(this.environment.discountsService);
+  }
+
+  /**
+   * Obtiene un descuento por su ID
+   * @param id ID del descuento
+   */
+  getDescuento(id: string): Observable<Descuento> {
+    return this.http.get<Descuento>(`${this.environment.discountsService}/${id}`);
+  }
+
+  /**
+   * Crea un nuevo descuento
+   * @param descuento Datos del descuento a crear
+   */
+  createDescuento(descuento: Omit<Descuento, 'id'>): Observable<Descuento> {
+    return this.http.post<Descuento>(this.environment.discountsService, descuento);
+  }
+
+  /**
+   * Actualiza un descuento existente
+   * @param id ID del descuento a actualizar
+   * @param descuento Datos actualizados del descuento
+   */
+  updateDescuento(id: string, descuento: Partial<Descuento>): Observable<Descuento> {
+    return this.http.put<Descuento>(`${this.environment.discountsService}/${id}`, descuento);
+  }
+
+  /**
+   * Elimina un descuento
+   * @param id ID del descuento a eliminar
+   */
+  deleteDescuento(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.environment.discountsService}/${id}`);
   }
 }
