@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from .api import events, promotores, etapas, descuentos, payments
 from . import auth
+from .models.user import User
 
 app = FastAPI(title="Beat Bogotá API")
 
