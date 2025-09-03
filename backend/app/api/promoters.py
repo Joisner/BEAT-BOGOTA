@@ -52,7 +52,7 @@ def read_promoters(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     """
     Retrieve all promoters.
     """
-    promoters = db.query(PromoterModel).offset(skip).limit(limit).all()
+    promoters = db.query(PromoterModel).order_by(PromoterModel.id).offset(skip).limit(limit).all()
     return promoters
 
 @router.get("/{promoter_id}", response_model=Promoter)

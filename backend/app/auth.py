@@ -41,34 +41,34 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
 
 
 # --- MOCKED AUTHENTICATION FOR DEVELOPMENT ---
-# async def get_current_user_mock(token: str = Depends(oauth2_scheme)):
-#     """
-#     Modified mock dependency that simulates user authentication without DB writes.
-#     It creates an in-memory user object.
-#     Pass a token like "Bearer <user_id>:<role>" in the Authorization header.
-#     Example: "user1:admin"
-#     """
-#     try:
-#         user_id, role_str = token.split(":")
-#     except ValueError:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail="Invalid mock token format. Expected '<user_id>:<role>'."
-#         )
+async def get_current_user_mock(token: str = Depends(oauth2_scheme)):
+    """
+    Modified mock dependency that simulates user authentication without DB writes.
+    It creates an in-memory user object.
+    Pass a token like "Bearer <user_id>:<role>" in the Authorization header.
+    Example: "user1:admin"
+    """
+    try:
+        user_id, role_str = token.split(":")
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid mock token format. Expected '<user_id>:<role>'."
+        )
 
-#     try:
-#         # Validate the role from the token
-#         role = UserRole(role_str)
-#     except ValueError:
-#          raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST,
-#             detail=f"Invalid role '{role_str}' in mock token. Must be one of {', '.join([r.value for r in UserRole])}."
-#         )
+    try:
+        # Validate the role from the token
+        role = UserRole(role_str)
+    except ValueError:
+         raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid role '{role_str}' in mock token. Must be one of {', '.join([r.value for r in UserRole])}."
+        )
 
-#     # Create an in-memory User object. No database interaction.
-#     mock_user = User(id=user_id, email=f"{user_id}@example.com", role=role)
+    # Create an in-memory User object. No database interaction.
+    mock_user = User(id=user_id, email=f"{user_id}@example.com", role=role)
 
-#     return mock_user
+    return mock_user
 
 # --- ROLE-BASED ACCESS CONTROL DEPENDENCIES ---
 

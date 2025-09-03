@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Text, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from ..database import Base
+from sqlalchemy.dialects.mssql import JSON
 
 # Association Table for Event and Promoter (Many-to-Many)
 event_promoters = Table('event_promoters', Base.metadata,
@@ -16,14 +17,11 @@ class Event(Base):
     date = Column(DateTime, nullable=False)
     location = Column(String, nullable=False)
     description = Column(Text)
-    contact_type = Column(String) # 'whatsapp' or 'link'
-    contact_value = Column(String)
+    contact = Column(JSON)  # Stores {"type": "whatsapp|link", "value": "string"}
     imageUrl = Column(String)
     genre = Column(String)
-    price_min = Column(Float)
-    price_max = Column(Float)
-    price_currency = Column(String, default='COP')
-    tags = Column(String) # Storing as comma-separated string
+    price = Column(JSON)  # Stores {"min": number, "max": number, "currency": "string"}
+    tags = Column(JSON)  # Stores array of strings
     capacity = Column(Integer)
     featured = Column(Boolean, default=False)
 
