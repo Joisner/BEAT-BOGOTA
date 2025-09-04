@@ -2,13 +2,13 @@ export type DescuentoTipo = 'general' | 'promotor' | 'entrada';
 
 export interface Descuento {
   id: string;
-  codigo: string;
-  descripcion: string;
-  tipo: DescuentoTipo;
-  valor: number; // porcentaje o valor fijo
-  activo: boolean;
-  fechaInicio?: Date;
-  fechaFin?: Date;
-  promotorId?: string; // si es por promotor
-  entradaTipo?: string; // si es por tipo de entrada
+  code: string;
+  description: string;
+  type: DescuentoTipo;
+  value: number; // porcentaje o valor fijo
+  active: boolean;
+  start_date?: Date;
+  end_date?: Date;
+  promoter_id?: string; // si es por promotor
+  ticket_stage_id?: string; // si es por tipo de entrada
 }

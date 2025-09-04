@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { combineLatest, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
-import { Event } from '../../core/models/event.model';
-import { EventService } from '../../core/services/event.service';
-import { IconsModule } from '../../core/module/icons.module';
-import { CartService } from '../../core/services/cart.service';
+import { Event } from '../../../core/models/event.model';
+import { EventService } from '../../../core/services/event.service';
+import { IconsModule } from '../../../core/module/icons.module';
+import { CartService } from '../../../core/services/cart.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 

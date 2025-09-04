@@ -1,8 +1,8 @@
 // ...existing code...
 import { Routes } from '@angular/router';
-import { EventsComponent } from './pages/events/events.component';
-import { EventFormComponent } from './pages/event-form/event-form.component';
-import { EventDetailComponent } from './pages/event-detail/event-detail.component';
+import { EventsComponent } from './pages/events-management/events/events.component';
+import { EventFormComponent } from './pages/events-management/event-form/event-form.component';
+import { EventDetailComponent } from './pages/events-management/event-detail/event-detail.component';
 import { LoginComponent } from './pages/login/login.component';
 import { EventListComponent } from './pages/admin/event-list/event-list.component';
 import { PromotorListComponent } from './pages/admin/promotor-list/promotor-list.component';

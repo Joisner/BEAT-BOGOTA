@@ -20,8 +20,13 @@ export class DescuentoListComponent implements OnInit {
     constructor(private descuentoService: DescuentoService) { }
 
     ngOnInit(): void {
-        this.descuentoService.getDescuentos().subscribe(descs => {
-            this.descuentos = descs;
+        this.descuentoService.getDescuentos().subscribe({
+            next: (descs) => {
+                this.descuentos = descs;
+            },
+            error: (err) => {
+                console.error('Error loading descuentos:', err);
+            }
         });
     }
 

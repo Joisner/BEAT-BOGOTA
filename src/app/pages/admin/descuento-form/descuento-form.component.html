@@ -18,7 +18,7 @@
     <label>Promotor</label>
     <select formControlName="promotorId" class="input">
       <option value="">Selecciona un promotor</option>
-      <option *ngFor="let p of promotores" [value]="p.id">{{ p.nombre }}</option>
+      <option *ngFor="let p of promotores" [value]="p.id">{{ p.name }}</option>
     </select>
   </div>
   <div *ngIf="descuentoForm.get('tipo')?.value === 'entrada'">

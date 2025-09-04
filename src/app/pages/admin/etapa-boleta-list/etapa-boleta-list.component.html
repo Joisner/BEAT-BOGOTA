@@ -66,46 +66,46 @@
               *ngFor="let e of etapas" 
               class="border-b border-gray-700 hover:bg-gray-800/70 transition-colors duration-200">
               <td class="px-4 sm:px-6 py-4 font-medium text-white">
-                <div class="font-semibold">{{ e.nombre }}</div>
+                <div class="font-semibold">{{ e.name }}</div>
                 <div class="text-xs text-gray-400 mt-1">ID: {{ e.id }}</div>
               </td>
               <td class="px-4 sm:px-6 py-4">
                 <div class="flex flex-col">
                   <div class="flex items-center">
                     <lucide-icon name="calendar" class="h-4 w-4 mr-1 text-purple-400"></lucide-icon>
-                    <span>{{ e.fechaInicio | date:'shortDate' }}</span>
+                    <span>{{ e.start_date | date:'shortDate' }}</span>
                   </div>
                   <div class="flex items-center text-sm text-gray-400">
                     <lucide-icon name="calendar-x" class="h-3 w-3 mr-1 text-gray-500"></lucide-icon>
-                    {{ e.fechaFin | date:'shortDate' }}
+                    {{ e.end_date | date:'shortDate' }}
                   </div>
                 </div>
               </td>
               <td class="px-4 sm:px-6 py-4 font-medium">
-                {{ e.precio | currency:'COP':'symbol':'1.0-0' }}
+                {{ e.price | currency:'COP':'symbol':'1.0-0' }}
               </td>
               <td class="px-4 sm:px-6 py-4">
                 <span class="px-2 py-1 rounded-full text-xs font-medium"
                   [ngClass]="{
-                    'bg-green-900/50 text-green-300': e.disponibilidad > 50,
-                    'bg-yellow-900/50 text-yellow-300': e.disponibilidad > 10 && e.disponibilidad <= 50,
-                    'bg-red-900/50 text-red-300': e.disponibilidad <= 10
+                    'bg-green-900/50 text-green-300': e.availability > 50,
+                    'bg-yellow-900/50 text-yellow-300': e.availability > 10 && e.availability <= 50,
+                    'bg-red-900/50 text-red-300': e.availability <= 10
                   }">
-                  {{ e.disponibilidad }} disponibles
+                  {{ e.availability }} disponibles
                 </span>
               </td>
               <td class="px-4 sm:px-6 py-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                   [ngClass]="{
-                    'bg-green-900/50 text-green-300': e.activa,
-                    'bg-gray-800 text-gray-400': !e.activa
+                    'bg-green-900/50 text-green-300': e.active,
+                    'bg-gray-800 text-gray-400': !e.active
                   }">
                   <span class="w-2 h-2 rounded-full mr-1.5"
                     [ngClass]="{
-                      'bg-green-400': e.activa,
-                      'bg-gray-500': !e.activa
+                      'bg-green-400': e.active,
+                      'bg-gray-500': !e.active
                     }"></span>
-                  {{ e.activa ? 'Activa' : 'Inactiva' }}
+                  {{ e.active ? 'Activa' : 'Inactiva' }}
                 </span>
               </td>
               <td class="px-4 sm:px-6 py-4">

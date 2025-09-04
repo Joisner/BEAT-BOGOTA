@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EventService } from '../../core/services/event.service';
-import { IconsModule } from '../../core/module/icons.module';
+import { EventService } from '../../../core/services/event.service';
+import { IconsModule } from '../../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
-import { Event } from '../../core/models/event.model';
-import { PromotorService } from '../../core/services/promotor.service';
-import { Promotor } from '../../core/models/promotor.model';
-import { EtapaBoletaService } from '../../core/services/etapa-boleta.service';
-import { EtapaBoleta } from '../../core/models/etapa-boleta.model';
+import { Event } from '../../../core/models/event.model';
+import { PromotorService } from '../../../core/services/promotor.service';
+import { Promotor } from '../../../core/models/promotor.model';
+import { EtapaBoletaService } from '../../../core/services/etapa-boleta.service';
+import { EtapaBoleta } from '../../../core/models/etapa-boleta.model';
 
 @Component({
   selector: 'app-event-form',

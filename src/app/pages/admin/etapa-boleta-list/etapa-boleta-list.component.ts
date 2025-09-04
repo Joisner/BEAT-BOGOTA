@@ -39,6 +39,7 @@ export class EtapaBoletaListComponent implements OnInit {
             finalize(() => this.loading = false)
         ).subscribe({
             next: (etapas) => {
+                debugger;
                 this.etapas = etapas;
             },
             error: (err) => {
@@ -71,6 +72,6 @@ export class EtapaBoletaListComponent implements OnInit {
     }
 
     nuevaEtapa(): void {
-        this.router.navigate(['/admin/etapas-boleta/nueva']);
+        this.router.navigate(['/admin/etapas-boleta/new']);
     }
 }

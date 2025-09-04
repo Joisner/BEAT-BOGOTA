@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { Event } from '../../core/models/event.model';
-import { EventService } from '../../core/services/event.service';
-import { CartService } from '../../core/services/cart.service';
-import { IconsModule } from '../../core/module/icons.module';
+import { Event } from '../../../core/models/event.model';
+import { EventService } from '../../../core/services/event.service';
+import { CartService } from '../../../core/services/cart.service';
+import { IconsModule } from '../../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 

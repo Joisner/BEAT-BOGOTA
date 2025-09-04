@@ -23,11 +23,11 @@
           </thead>
           <tbody *ngIf="descuentos.length; else loading">
             <tr *ngFor="let d of descuentos" class="border-b border-gray-700 hover:bg-gray-800/70 transition-colors duration-200">
-              <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ d.codigo }}</td>
-              <td class="px-6 py-4">{{ d.descripcion }}</td>
-              <td class="px-6 py-4">{{ d.tipo }}</td>
-              <td class="px-6 py-4">{{ d.valor }}%</td>
-              <td class="px-6 py-4">{{ d.activo ? 'Sí' : 'No' }}</td>
+              <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ d.code }}</td>
+              <td class="px-6 py-4">{{ d.description }}</td>
+              <td class="px-6 py-4">{{ d.type }}</td>
+              <td class="px-6 py-4">{{ d.value }}%</td>
+              <td class="px-6 py-4">{{ d.active ? 'Sí' : 'No' }}</td>
               <td class="px-6 py-4 text-center">
                 <a [routerLink]="['/admin/descuentos/edit', d.id]" class="text-cyan-400 hover:text-cyan-300 mr-4 font-semibold transition-colors duration-200">
                   <lucide-icon name="pencil" class="inline-block h-5 w-5"></lucide-icon>

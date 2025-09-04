@@ -3,18 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Descuento } from '../models/descuento.model';
 import { environment } from '../../env/environment';
+import { BearerService } from './bearer.service';
 
 @Injectable({ providedIn: 'root' })
 export class DescuentoService {
   environment = environment;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private bearerService: BearerService) {}
 
   /**
    * Obtiene todos los descuentos
    */
   getDescuentos(): Observable<Descuento[]> {
-    return this.http.get<Descuento[]>(this.environment.discountsService);
+    debugger;
+    return this.http.get<Descuento[]>(`${environment.discountsService}`, this.bearerService.bearerToken);
   }
 
   /**
