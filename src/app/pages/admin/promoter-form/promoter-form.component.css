@@ -1,0 +1,65 @@
+/* Custom animations and effects */
+.bg-size-200 {
+    background-size: 200% 200%;
+  }
+  
+  .bg-pos-0 {
+    background-position: 0% 50%;
+  }
+  
+  .bg-pos-100 {
+    background-position: 100% 50%;
+  }
+  
+  /* Smooth focus transitions */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    transform: translateY(-2px);
+  }
+  
+  /* Custom radio button animations */
+  input[type="radio"]:checked + div {
+    transform: scale(1.02);
+  }
+  
+  /* Glowing effect for submit button */
+  button:not(:disabled):hover {
+    filter: drop-shadow(0 0 30px rgba(147, 51, 234, 0.4));
+  }
+  
+  /* Gradient animation for background */
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .animate-gradient {
+    animation: gradient-shift 8s ease infinite;
+  }
+  
+  /* Custom toggle switch animation */
+  .toggle-switch {
+    transition: all 0.3s ease;
+  }
+  
+  /* Pulse effect for featured badge */
+  .pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.6);
+    }
+  }
+  

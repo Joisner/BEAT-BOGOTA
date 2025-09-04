@@ -14,22 +14,37 @@ import { RouterModule } from '@angular/router';
     styleUrls: ['./promotor-list.component.css']
 })
 export class PromotorListComponent implements OnInit {
-    promotores: Promotor[] = [];
+    promotores: Promotor[] = []
 
-    constructor(private promotorService: PromotorService) { }
-
+    constructor(private promotorService: PromotorService) {}
+  
     ngOnInit(): void {
-        this.promotorService.getPromotores().subscribe({
-            next: (promotores) => {
-                this.promotores = promotores;
-            },
-            error: (error) => {
-                console.error(`${`No fue posible cargar promotores ${error}`}`)
-            }
-        });
+      this.loadPromotores()
     }
-
-    eliminarPromotor(id: number | string){
-        
+  
+    private loadPromotores(): void {
+      this.promotorService.getPromotores().subscribe({
+        next: (promotores) => {
+          this.promotores = promotores
+        },
+        error: (error) => {
+          console.error(`No fue posible cargar promotores ${error}`)
+        },
+      })
     }
-}
+  
+    eliminarPromotor(id: string): void {
+      if (confirm("¿Estás seguro de que deseas eliminar este promotor?")) {
+        this.promotorService.deletePromotor(id).subscribe({
+          next: () => {
+            this.loadPromotores() // Reload the list
+            console.log("Promotor eliminado exitosamente")
+          },
+          error: (error) => {
+            console.error("Error al eliminar promotor:", error)
+          },
+        })
+      }
+    }
+  }
+  

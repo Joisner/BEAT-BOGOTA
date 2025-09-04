@@ -1,55 +1,90 @@
-<div class="min-h-screen bg-gray-900 text-white p-8">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-4xl font-black text-purple-400">Promotores Autorizados</h1>
-      <a routerLink="/admin/promotores/new"
-        class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:scale-105 transition-transform duration-300 hover:shadow-2xl hover:shadow-purple-500/25">
-        <lucide-icon name="plus" class="mr-2 h-6 w-6"></lucide-icon>
-        Nuevo Promotor
-      </a>
+<div class="min-h-screen bg-black relative overflow-hidden">
+  <!-- Animated Background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500/5 via-transparent to-transparent animate-pulse"></div>
+
+  <div class="container mx-auto px-6 py-12 max-w-7xl relative z-10">
+    
+    <!-- Header Section -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center">
+        <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+          Promotores Autorizados
+        </h1>
+        <a routerLink="/admin/promotores/new"
+          class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-black text-lg rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25">
+          <div class="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative flex items-center">
+            <lucide-icon name="plus" class="mr-3 h-6 w-6"></lucide-icon>
+            Nuevo Promotor
+          </div>
+        </a>
+      </div>
     </div>
-    <div class="bg-gray-800/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl shadow-lg overflow-hidden">
+
+    <!-- Table Container -->
+    <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-700/50 rounded-3xl shadow-2xl overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full text-sm text-left text-gray-300">
           <thead class="text-xs text-purple-300 uppercase bg-gray-900/80">
             <tr>
-              <th class="px-6 py-4">Nombre</th>
-              <th class="px-6 py-4">WhatsApp</th>
-              <th class="px-6 py-4">Perfil</th>
-              <th class="px-6 py-4 text-center">Acciones</th>
+              <th class="px-6 py-4 font-bold">Nombre</th>
+              <th class="px-6 py-4 font-bold">WhatsApp</th>
+              <th class="px-6 py-4 font-bold">Perfil</th>
+              <th class="px-6 py-4 text-center font-bold">Acciones</th>
             </tr>
           </thead>
           <tbody *ngIf="promotores.length; else loading">
-            <tr *ngFor="let promotor of promotores" class="border-b border-gray-700 hover:bg-gray-800/70 transition-colors duration-200">
+            <tr *ngFor="let promotor of promotores" class="border-b border-gray-700/50 hover:bg-gray-800/70 transition-colors duration-200">
               <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ promotor.name }}</td>
               <td class="px-6 py-4">
-                <a *ngIf="promotor.whatsapp" [href]="promotor.whatsapp" target="_blank" rel="noopener" class="text-green-400 hover:underline">WhatsApp</a>
+                <a *ngIf="promotor.whatsapp" [href]="promotor.whatsapp" target="_blank" rel="noopener" 
+                   class="inline-flex items-center text-green-400 hover:text-green-300 transition-colors duration-200">
+                  <lucide-icon name="phone" class="mr-2 h-4 w-4"></lucide-icon>
+                  WhatsApp
+                </a>
+                <span *ngIf="!promotor.whatsapp" class="text-gray-500">No disponible</span>
               </td>
               <td class="px-6 py-4">
-                <a *ngIf="promotor.profile_url" [href]="promotor.profile_url" target="_blank" rel="noopener" class="text-cyan-400 hover:underline">Perfil</a>
+                <a *ngIf="promotor.profile_url" [href]="promotor.profile_url" target="_blank" rel="noopener" 
+                   class="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors duration-200">
+                  <lucide-icon name="external-link" class="mr-2 h-4 w-4"></lucide-icon>
+                  Ver Perfil
+                </a>
+                <span *ngIf="!promotor.profile_url" class="text-gray-500">No disponible</span>
               </td>
               <td class="px-6 py-4 text-center">
-                <a [routerLink]="['/admin/promotores/edit', promotor.id]" class="text-cyan-400 hover:text-cyan-300 mr-4 font-semibold transition-colors duration-200">
-                  <lucide-icon name="pencil" class="inline-block h-5 w-5"></lucide-icon>
-                  Editar
-                </a>
-                <button (click)="eliminarPromotor(promotor.id)" class="text-pink-500 hover:text-pink-400 font-semibold transition-colors duration-200">
-                  <lucide-icon name="trash-2" class="inline-block h-5 w-5"></lucide-icon>
-                  Eliminar
-                </button>
+                <div class="flex justify-center space-x-4">
+                  <a [routerLink]="['/admin/promotores/edit', promotor.id]" 
+                     class="inline-flex items-center px-4 py-2 bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-600/30 rounded-lg font-semibold transition-all duration-200">
+                    <lucide-icon name="pencil" class="mr-2 h-4 w-4"></lucide-icon>
+                    Editar
+                  </a>
+                  <button (click)="eliminarPromotor(promotor.id)" 
+                          class="inline-flex items-center px-4 py-2 bg-pink-600/20 border border-pink-500/30 text-pink-400 hover:text-pink-300 hover:bg-pink-600/30 rounded-lg font-semibold transition-all duration-200">
+                    <lucide-icon name="trash-2" class="mr-2 h-4 w-4"></lucide-icon>
+                    Eliminar
+                  </button>
+                </div>
               </td>
             </tr>
             <tr *ngIf="promotores.length === 0">
               <td colspan="4" class="px-6 py-12 text-center text-gray-400">
-                No hay promotores habilitados.
+                <div class="flex flex-col items-center">
+                  <lucide-icon name="users" class="h-16 w-16 text-gray-600 mb-4"></lucide-icon>
+                  <p class="text-xl font-semibold mb-2">No hay promotores registrados</p>
+                  <p class="text-gray-500">Crea el primer promotor para comenzar</p>
+                </div>
               </td>
             </tr>
           </tbody>
           <ng-template #loading>
             <tr>
               <td colspan="4" class="px-6 py-12 text-center text-gray-400">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-500 border-t-transparent"></div>
-                <p class="mt-2">Cargando promotores...</p>
+                <div class="flex flex-col items-center">
+                  <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mb-4"></div>
+                  <p class="text-lg font-semibold">Cargando promotores...</p>
+                </div>
               </td>
             </tr>
           </ng-template>

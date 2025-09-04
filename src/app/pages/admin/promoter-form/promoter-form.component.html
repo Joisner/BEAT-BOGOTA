@@ -1,0 +1,289 @@
+<p>promoter-form works!</p>
+<div class="min-h-screen bg-black relative overflow-hidden">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500/5 via-transparent to-transparent animate-pulse"></div>
+  
+    <div class="container mx-auto px-6 py-12 max-w-4xl relative z-10">
+      
+      <!-- Header Section -->
+      <div class="mb-12">
+        <a routerLink="/promotores" 
+           class="group inline-flex items-center text-purple-400 hover:text-purple-300 mb-6 transition-colors duration-300">
+          <lucide-icon name="chevron-left" class="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform duration-300"></lucide-icon>
+          Volver a Promotores
+        </a>
+        
+        <div class="text-center">
+          <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+            {{pageTitle}}
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Registra un nuevo promotor en la plataforma. Completa la información para crear su perfil profesional.
+          </p>
+        </div>
+      </div>
+  
+      <!-- Form Container -->
+      <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 md:p-12 shadow-2xl">
+        
+        <form [formGroup]="promotorForm" (ngSubmit)="onSubmit()" class="space-y-8">
+          
+          <!-- Basic Info Section -->
+          <div class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+              <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4">
+                <lucide-icon name="user" class="h-5 w-5 text-white"></lucide-icon>
+              </div>
+              Información Personal
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- Name -->
+              <div>
+                <label for="name" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Nombre Completo
+                </label>
+                <input type="text" 
+                       id="name" 
+                       formControlName="name" 
+                       placeholder="ej. Carlos Rodríguez"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+                @if (promotorForm.get('name')?.invalid && promotorForm.get('name')?.touched) {
+                  <p class="mt-2 text-red-400 flex items-center">
+                    <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                    El nombre es requerido (mínimo 2 caracteres)
+                  </p>
+                }
+              </div>
+  
+              <!-- Email -->
+              <div>
+                <label for="email" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Email
+                </label>
+                <input type="email" 
+                       id="email" 
+                       formControlName="email"
+                       placeholder="ej. carlos@ejemplo.com"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+                @if (promotorForm.get('email')?.invalid && promotorForm.get('email')?.touched) {
+                  <p class="mt-2 text-red-400 flex items-center">
+                    <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                    Email válido es requerido
+                  </p>
+                }
+              </div>
+  
+              <!-- Phone -->
+              <div>
+                <label for="phone" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Teléfono
+                </label>
+                <input type="tel" 
+                       id="phone" 
+                       formControlName="phone"
+                       placeholder="ej. +57 300 123 4567"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+                @if (promotorForm.get('phone')?.invalid && promotorForm.get('phone')?.touched) {
+                  <p class="mt-2 text-red-400 flex items-center">
+                    <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                    El teléfono es requerido
+                  </p>
+                }
+              </div>
+  
+              <!-- Location -->
+              <div>
+                <label for="location" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Ubicación
+                </label>
+                <input type="text" 
+                       id="location" 
+                       formControlName="location"
+                       placeholder="ej. Bogotá, Colombia"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+              </div>
+            </div>
+          </div>
+  
+          <!-- Professional Info Section -->
+          <div class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+              <div class="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+                <lucide-icon name="briefcase" class="h-5 w-5 text-white"></lucide-icon>
+              </div>
+              Información Profesional
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- Bio -->
+              <div class="md:col-span-2">
+                <label for="bio" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Biografía
+                </label>
+                <textarea id="bio" 
+                          formControlName="bio" 
+                          rows="4"
+                          placeholder="Describe tu experiencia y especialidades en la industria de la música electrónica..."
+                          class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500/70 resize-none"></textarea>
+                @if (promotorForm.get('bio')?.invalid && promotorForm.get('bio')?.touched) {
+                  <p class="mt-2 text-red-400 flex items-center">
+                    <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                    Máximo 500 caracteres
+                  </p>
+                }
+              </div>
+  
+              <!-- Specialties -->
+              <div>
+                <label for="specialties" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Especialidades
+                </label>
+                <input type="text" 
+                       id="specialties" 
+                       formControlName="specialties"
+                       placeholder="ej. Techno, House, Eventos Masivos"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500/70">
+                <p class="mt-2 text-gray-400 text-sm">
+                  Separa las especialidades con comas
+                </p>
+              </div>
+  
+              <!-- Experience -->
+              <div>
+                <label for="experience" class="block text-lg font-semibold text-gray-200 mb-3">
+                  Años de Experiencia
+                </label>
+                <input type="number" 
+                       id="experience" 
+                       formControlName="experience"
+                       placeholder="ej. 5"
+                       min="0"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500/70">
+              </div>
+  
+              <!-- Profile Image -->
+              <div class="md:col-span-2">
+                <label for="profileImage" class="block text-lg font-semibold text-gray-200 mb-3">
+                  URL de Imagen de Perfil
+                </label>
+                <input type="url" 
+                       id="profileImage" 
+                       formControlName="profileImage"
+                       placeholder="https://ejemplo.com/mi-foto.jpg"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500/70">
+                <p class="mt-2 text-gray-400 text-sm">
+                  Agrega una foto profesional para tu perfil
+                </p>
+              </div>
+  
+              <!-- Featured Promotor -->
+              <div class="md:col-span-2 flex items-center">
+                <label class="flex items-center cursor-pointer">
+                  <input type="checkbox" 
+                         formControlName="featured"
+                         class="sr-only">
+                  <div class="relative">
+                    <div class="w-12 h-6 bg-gray-600 rounded-full shadow-inner transition-colors duration-300" 
+                         [class]="promotorForm.get('featured')?.value ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-gray-600'"></div>
+                    <div class="absolute w-4 h-4 bg-white rounded-full shadow top-1 transition-transform duration-300"
+                         [class]="promotorForm.get('featured')?.value ? 'translate-x-7 left-0' : 'translate-x-1 left-0'"></div>
+                  </div>
+                  <span class="ml-3 text-lg font-semibold text-gray-200">Promotor Destacado</span>
+                </label>
+                <p class="ml-3 text-gray-400 text-sm">Los promotores destacados aparecen primero</p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Social Media Section -->
+          <div class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+              <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mr-4">
+                <lucide-icon name="share-2" class="h-5 w-5 text-white"></lucide-icon>
+              </div>
+              Redes Sociales
+            </h2>
+            
+            <div formGroupName="socialMedia" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Instagram -->
+              <div>
+                <label for="instagram" class="block text-lg font-semibold text-gray-200 mb-3 flex items-center">
+                  <lucide-icon name="instagram" class="mr-2 h-5 w-5 text-pink-400"></lucide-icon>
+                  Instagram
+                </label>
+                <input type="url" 
+                       id="instagram" 
+                       formControlName="instagram"
+                       placeholder="https://instagram.com/tu_usuario"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 hover:border-gray-500/70">
+              </div>
+  
+              <!-- Facebook -->
+              <div>
+                <label for="facebook" class="block text-lg font-semibold text-gray-200 mb-3 flex items-center">
+                  <lucide-icon name="facebook" class="mr-2 h-5 w-5 text-blue-400"></lucide-icon>
+                  Facebook
+                </label>
+                <input type="url" 
+                       id="facebook" 
+                       formControlName="facebook"
+                       placeholder="https://facebook.com/tu_pagina"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-gray-500/70">
+              </div>
+  
+              <!-- Twitter -->
+              <div>
+                <label for="twitter" class="block text-lg font-semibold text-gray-200 mb-3 flex items-center">
+                  <lucide-icon name="twitter" class="mr-2 h-5 w-5 text-cyan-400"></lucide-icon>
+                  Twitter
+                </label>
+                <input type="url" 
+                       id="twitter" 
+                       formControlName="twitter"
+                       placeholder="https://twitter.com/tu_usuario"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500/70">
+              </div>
+  
+              <!-- Website -->
+              <div>
+                <label for="website" class="block text-lg font-semibold text-gray-200 mb-3 flex items-center">
+                  <lucide-icon name="globe" class="mr-2 h-5 w-5 text-green-400"></lucide-icon>
+                  Sitio Web
+                </label>
+                <input type="url" 
+                       id="website" 
+                       formControlName="website"
+                       placeholder="https://tu-sitio-web.com"
+                       class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 hover:border-gray-500/70">
+              </div>
+            </div>
+          </div>
+  
+          <!-- Submit Button -->
+          <div class="text-center pt-8 border-t border-gray-700/50">
+            <button type="submit" 
+                    [disabled]="promotorForm.invalid || isSubmitting"
+                    class="group relative inline-flex items-center justify-center px-12 py-6 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-black text-xl rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 disabled:hover:scale-100 disabled:hover:shadow-none">
+              <div class="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div class="relative flex items-center">
+                @if (isSubmitting) {
+                  <lucide-icon name="loader-2" class="mr-3 h-6 w-6 animate-spin"></lucide-icon>
+                  <span>Guardando...</span>
+                } @else {
+                  <lucide-icon name="user-plus" class="mr-3 h-6 w-6 group-hover:animate-pulse"></lucide-icon>
+                  <span>{{submitButtonText}}</span>
+                }
+              </div>
+            </button>
+            
+            <p class="mt-4 text-gray-400 text-sm">
+              El promotor podrá ser asignado a eventos una vez creado
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

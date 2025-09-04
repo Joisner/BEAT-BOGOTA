@@ -1,18 +1,24 @@
-.input {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #a78bfa;
-  background: #18181b;
-  color: #fff;
-  margin-top: 0.25rem;
+.bg-size-200 {
+  background-size: 200% 200%;
 }
-.btn {
-  background: #a78bfa;
-  color: #fff;
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
+
+.bg-pos-0 {
+  background-position: 0% 50%;
+}
+
+.bg-pos-100 {
+  background-position: 100% 50%;
+}
+
+.animation-delay-75 {
+  animation-delay: 0.75s;
+}
+
+/* Hover effects */
+.group:hover .group-hover\\:rotate-12 {
+  transform: rotate(12deg);
+}
+
+.group:hover .group-hover\\:scale-110 {
+  transform: scale(1.1);
 }

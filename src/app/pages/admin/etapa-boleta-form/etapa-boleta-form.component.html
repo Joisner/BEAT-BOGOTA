@@ -1,28 +1,268 @@
-<h2>Crear/Editar Etapa de Boleta</h2>
-<form [formGroup]="etapaForm" (ngSubmit)="onSubmit()" class="space-y-6">
-  <div>
-    <label>Nombre</label>
-    <input formControlName="nombre" type="text" class="input" />
+<div class="min-h-screen bg-black relative overflow-hidden">
+  <!-- Animated Background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500/5 via-transparent to-transparent animate-pulse"></div>
+
+  <div class="container mx-auto px-6 py-12 max-w-4xl relative z-10">
+    
+    <!-- Header Section -->
+    <div class="mb-12">
+      <a routerLink="/etapas" 
+         class="group inline-flex items-center text-purple-400 hover:text-purple-300 mb-6 transition-colors duration-300">
+        <lucide-icon name="chevron-left" class="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform duration-300"></lucide-icon>
+        Volver a Etapas
+      </a>
+      
+      <div class="text-center">
+        <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+          {{pageTitle}}
+        </h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+          Configura las etapas de venta de boletas para tus eventos. Define precios, fechas y disponibilidad.
+        </p>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 md:p-12 shadow-2xl">
+      
+      <form [formGroup]="stageForm" (ngSubmit)="onSubmit()" class="space-y-8">
+        
+        <!-- Event Selection Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="calendar" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Seleccionar Evento
+          </h2>
+          
+          <div class="grid grid-cols-1 gap-8">
+            <!-- Event Selection -->
+            <div>
+              <label for="event_id" class="block text-lg font-semibold text-gray-200 mb-3">
+                Evento
+              </label>
+              <select formControlName="event_id" 
+                      id="event_id"
+                      (change)="onEventChange()"
+                      class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 hover:border-gray-500/70">
+                <option value="">Seleccionar evento</option>
+                <option *ngFor="let event of events" [value]="event.id">
+                  {{event.name}} - {{event.date | date:'dd/MM/yyyy'}} - {{event.location}}
+                </option>
+              </select>
+              @if (stageForm.get('event_id')?.invalid && stageForm.get('event_id')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  Debes seleccionar un evento
+                </p>
+              }
+            </div>
+
+            <!-- Event Preview -->
+            @if (selectedEvent) {
+              <div class="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-500/30 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                  <lucide-icon name="info" class="mr-2 h-5 w-5 text-purple-400"></lucide-icon>
+                  Evento Seleccionado
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-300">
+                  <div>
+                    <p class="text-sm text-gray-400">Nombre</p>
+                    <p class="font-semibold">{{selectedEvent.name}}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-400">Fecha</p>
+                    <p class="font-semibold">{{selectedEvent.date | date:'dd/MM/yyyy HH:mm'}}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-400">Ubicación</p>
+                    <p class="font-semibold">{{selectedEvent.location}}</p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Stage Info Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="ticket" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Información de la Etapa
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Stage Name -->
+            <div>
+              <label for="name" class="block text-lg font-semibold text-gray-200 mb-3">
+                Nombre de la Etapa
+              </label>
+              <input type="text" 
+                     id="name" 
+                     formControlName="name" 
+                     placeholder="ej. Early Bird, Preventa, General"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (stageForm.get('name')?.invalid && stageForm.get('name')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  El nombre es requerido (mínimo 3 caracteres)
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="dollar-sign" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Precios y Disponibilidad
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Price -->
+            <div>
+              <label for="price" class="block text-lg font-semibold text-gray-200 mb-3">
+                Precio (COP)
+              </label>
+              <input type="number" 
+                     id="price" 
+                     formControlName="price"
+                     placeholder="ej. 50000"
+                     min="0"
+                     step="1000"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (stageForm.get('price')?.invalid && stageForm.get('price')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  El precio es requerido y debe ser mayor a 0
+                </p>
+              }
+            </div>
+
+            <!-- Available Quantity -->
+            <div>
+              <label for="availability" class="block text-lg font-semibold text-gray-200 mb-3">
+                Cantidad Disponible
+              </label>
+              <input type="number" 
+                     id="availability" 
+                     formControlName="availability"
+                     placeholder="ej. 100"
+                     min="1"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (stageForm.get('availability')?.invalid && stageForm.get('availability')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La cantidad debe ser mayor a 0
+                </p>
+              }
+            </div>
+
+            <!-- Active Status -->
+            <div class="flex items-center">
+              <div class="mt-8">
+                <label class="flex items-center cursor-pointer">
+                  <input type="checkbox" 
+                         formControlName="active"
+                         class="sr-only">
+                  <div class="relative">
+                    <div class="w-12 h-6 bg-gray-600 rounded-full shadow-inner transition-colors duration-300" 
+                         [class]="stageForm.get('active')?.value ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-gray-600'"></div>
+                    <div class="absolute w-4 h-4 bg-white rounded-full shadow top-1 transition-transform duration-300"
+                         [class]="stageForm.get('active')?.value ? 'translate-x-7 left-0' : 'translate-x-1 left-0'"></div>
+                  </div>
+                  <span class="ml-3 text-lg font-semibold text-gray-200">Etapa Activa</span>
+                </label>
+                <p class="mt-1 text-gray-400 text-sm">Solo las etapas activas estarán disponibles para venta</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dates Section -->
+        <div class="mb-12">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-4">
+              <lucide-icon name="clock" class="h-5 w-5 text-white"></lucide-icon>
+            </div>
+            Fechas de Venta
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Start Date -->
+            <div>
+              <label for="start_date" class="block text-lg font-semibold text-gray-200 mb-3">
+                Fecha y Hora de Inicio
+              </label>
+              <input type="datetime-local" 
+                     id="start_date" 
+                     formControlName="start_date"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (stageForm.get('start_date')?.invalid && stageForm.get('start_date')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La fecha de inicio es requerida
+                </p>
+              }
+            </div>
+
+            <!-- End Date -->
+            <div>
+              <label for="end_date" class="block text-lg font-semibold text-gray-200 mb-3">
+                Fecha y Hora de Fin
+              </label>
+              <input type="datetime-local" 
+                     id="end_date" 
+                     formControlName="end_date"
+                     class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+              @if (stageForm.get('end_date')?.invalid && stageForm.get('end_date')?.touched) {
+                <p class="mt-2 text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La fecha de fin es requerida
+                </p>
+              }
+            </div>
+
+            @if (stageForm.errors?.['dateRangeInvalid']) {
+              <div class="md:col-span-2">
+                <p class="text-red-400 flex items-center">
+                  <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                  La fecha de fin debe ser posterior a la fecha de inicio
+                </p>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center pt-8 border-t border-gray-700/50">
+          <button type="submit" 
+                  [disabled]="stageForm.invalid || isSubmitting"
+                  class="group relative inline-flex items-center justify-center px-12 py-6 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-black text-xl rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 disabled:hover:scale-100 disabled:hover:shadow-none">
+            <div class="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="relative flex items-center">
+              @if (isSubmitting) {
+                <lucide-icon name="loader-2" class="mr-3 h-6 w-6 animate-spin"></lucide-icon>
+                <span>Guardando...</span>
+              } @else {
+                <lucide-icon name="ticket" class="mr-3 h-6 w-6 group-hover:animate-pulse"></lucide-icon>
+                <span>{{submitButtonText}}</span>
+              }
+            </div>
+          </button>
+          
+          <p class="mt-4 text-gray-400 text-sm">
+            La etapa estará disponible según las fechas configuradas
+          </p>
+        </div>
+      </form>
+    </div>
   </div>
-  <div>
-    <label>Fecha Inicio</label>
-    <input formControlName="fechaInicio" type="date" class="input" />
-  </div>
-  <div>
-    <label>Fecha Fin</label>
-    <input formControlName="fechaFin" type="date" class="input" />
-  </div>
-  <div>
-    <label>Precio</label>
-    <input formControlName="precio" type="number" min="1" class="input" />
-  </div>
-  <div>
-    <label>Disponibilidad</label>
-    <input formControlName="disponibilidad" type="number" min="1" class="input" />
-  </div>
-  <div>
-    <label>Activa</label>
-    <input formControlName="activa" type="checkbox" />
-  </div>
-  <button type="submit" [disabled]="etapaForm.invalid" class="btn">Guardar</button>
-</form>
+</div>
