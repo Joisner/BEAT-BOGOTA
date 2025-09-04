@@ -29,7 +29,7 @@ def read_discounts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     """
     Retrieve all discounts. Admin only.
     """
-    discounts = db.query(DiscountModel).offset(skip).limit(limit).all()
+    discounts = db.query(DiscountModel).order_by(DiscountModel.id).offset(skip).limit(limit).all()
     return discounts
 
 @router.get("/{discount_id}", response_model=Discount)
