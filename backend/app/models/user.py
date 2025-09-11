@@ -14,5 +14,7 @@ class User(Base):
     id = Column(String, primary_key=True, index=True)  # This will be the Firebase UID
     email = Column(String, unique=True, index=True, nullable=False)
     role = Column(Enum(UserRole), nullable=False)
+    name = Column(String, nullable=False)
+    lastname = Column(String, nullable=False)
 
     promoter = relationship("Promoter", back_populates="user", uselist=False)
