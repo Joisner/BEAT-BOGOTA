@@ -13,6 +13,11 @@ router = APIRouter(
     dependencies=[Depends(auth.require_admin)], # Secure all endpoints in this router
 )
 
+@router.get("/", response_model=List[User])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = db.query(UserModel).order_by(UserModel.id).offset(skip).limit(limit).all()
+    return users
+
 @router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """

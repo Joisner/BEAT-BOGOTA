@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Text, Table, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, joinedload
 from ..database import Base
 from sqlalchemy.dialects.mssql import JSON
 
@@ -27,4 +27,20 @@ class Event(Base):
 
     promoters = relationship("Promoter", secondary=event_promoters, back_populates="events")
     ticket_stages = relationship("TicketStage", back_populates="event")
-    # Add other relationships as needed, e.g., transactions
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'date': self.date.isoformat() if self.date else None,
+            'location': self.location,
+            'description': self.description,
+            'contact': self.contact,
+            'imageUrl': self.imageUrl,
+            'genre': self.genre,
+            'price': self.price,
+            'tags': self.tags,
+            'capacity': self.capacity,
+            'featured': self.featured,
+            'promotores': [p.id for p in self.promoters] if hasattr(self, 'promoters') else []
+        }
