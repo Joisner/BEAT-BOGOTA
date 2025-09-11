@@ -33,7 +33,7 @@ export class AdminSidebarComponent {
       expanded: false, // Cambiado a false por defecto
       children: [
         { name: 'Profile', icon: 'user', href: '/admin/users/profile' },
-        { name: 'Manage Users', icon: 'users', href: '/admin/users/manage' },
+        { name: 'Manage Users', icon: 'users', href: '/admin/users' },
         { name: 'Permissions', icon: 'shield', href: '/admin/users/permissions' }
       ]
     },

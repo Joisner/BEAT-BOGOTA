@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EtapaBoleta } from '../models/etapa-boleta.model';
 import { environment } from '../../env/environment';
+import { BearerService } from './bearer.service';
 
 @Injectable({ providedIn: 'root' })
 export class EtapaBoletaService {
   environment = environment;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private bearerService: BearerService) {}
 
   /**
    * Obtiene todas las etapas de boleta para un evento específico
@@ -34,7 +35,7 @@ export class EtapaBoletaService {
   createEtapa(eventId: string, etapa: Omit<EtapaBoleta, 'id'>): Observable<EtapaBoleta> {
     return this.http.post<EtapaBoleta>(
       `${this.environment.eventService}/${eventId}/ticket-stages`,
-      etapa
+      etapa, this.bearerService.bearerToken
     );
   }
 

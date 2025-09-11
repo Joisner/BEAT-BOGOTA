@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsModule } from '../../../core/module/icons.module';
 import { PromotorService } from '../../../core/services/promotor.service';
+import { FormValidationService } from '../../../core/services/form-validation.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
@@ -29,6 +30,7 @@ export class PromoterFormComponent {
   constructor(
     private fb: FormBuilder,
     private promotorService: PromotorService,
+    private formValidationService: FormValidationService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
@@ -105,9 +107,9 @@ export class PromoterFormComponent {
 
     const promotorData: Partial<Promotor> = {
       name: formValue.name,
-      email: formValue.email,
+      user_email: formValue.email,
       phone: formValue.phone,
-      whatsapp: formValue.whatsapp,
+      whatsapp: formValue.phone,
       profile_url: formValue.profileImage || this.getDefaultProfileImage(),
     }
 
@@ -135,55 +137,35 @@ export class PromoterFormComponent {
     return "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
   }
 
-  private showFormErrors(): void {
-    console.log("Form has errors, please check all fields")
-    const firstError = document.querySelector(".text-red-400")
-    if (firstError) {
-      firstError.scrollIntoView({ behavior: "smooth", block: "center" })
-    }
+  showFormErrors(): void {
+    this.formValidationService.showFormErrors('El formulario tiene errores, por favor verifica todos los campos');
   }
 
   private showSuccessMessage(): void {
-    console.log("¡Promotor creado exitosamente!")
+    const message = this.editMode 
+      ? '¡Promotor actualizado exitosamente!' 
+      : '¡Promotor creado exitosamente!';
+    this.formValidationService.showSuccessMessage(message);
   }
 
   private showErrorMessage(): void {
-    console.log("Error al crear el promotor. Por favor intenta de nuevo.")
+    const message = this.editMode
+      ? 'Error al actualizar el promotor. Por favor intenta de nuevo.'
+      : 'Error al crear el promotor. Por favor intenta de nuevo.';
+    this.formValidationService.showErrorMessage(message);
   }
 
   isFieldInvalid(fieldName: string): boolean {
-    const field = this.promotorForm.get(fieldName)
-    return field ? field.invalid && field.touched : false
+    return this.formValidationService.isFieldInvalid(this.promotorForm, fieldName);
   }
 
   isNestedFieldInvalid(groupName: string, fieldName: string): boolean {
-    const field = this.promotorForm.get(`${groupName}.${fieldName}`)
-    return field ? field.invalid && field.touched : false
+    return this.formValidationService.isNestedFieldInvalid(this.promotorForm, groupName, fieldName);
   }
 
   getFieldError(fieldName: string): string {
-    const field = this.promotorForm.get(fieldName)
-    if (!field || !field.errors || !field.touched) {
-      return ""
-    }
-
-    if (field.errors["required"]) {
-      return "Este campo es requerido"
-    }
-    if (field.errors["minlength"]) {
-      return `Mínimo ${field.errors["minlength"].requiredLength} caracteres`
-    }
-    if (field.errors["maxlength"]) {
-      return `Máximo ${field.errors["maxlength"].requiredLength} caracteres`
-    }
-    if (field.errors["email"]) {
-      return "Email inválido"
-    }
-    if (field.errors["min"]) {
-      return `El valor mínimo es ${field.errors["min"].min}`
-    }
-
-    return "Campo inválido"
+    const field = this.promotorForm.get(fieldName);
+    return this.formValidationService.getFieldError(field);
   }
 
   previewImage(): string | null {

@@ -16,7 +16,7 @@ export class DescuentoService {
    */
   getDescuentos(): Observable<Descuento[]> {
     debugger;
-    return this.http.get<Descuento[]>(`${environment.discountsService}`, this.bearerService.bearerToken);
+    return this.http.get<Descuento[]>(`${environment.discountsService}/`, this.bearerService.bearerToken);
   }
 
   /**

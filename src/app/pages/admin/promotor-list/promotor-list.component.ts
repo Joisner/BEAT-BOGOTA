@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsModule } from '../../../core/module/icons.module';
 import { RouterModule } from '@angular/router';
+import { LoadingComponent } from '../../../single-pages/loading/loading.component';
 
 @Component({
     standalone: true,
-    imports: [CommonModule, LucideAngularModule, IconsModule, RouterModule],
+    imports: [CommonModule, LucideAngularModule, IconsModule, RouterModule, LoadingComponent],
     selector: 'app-promotor-list',
     templateUrl: './promotor-list.component.html',
     styleUrls: ['./promotor-list.component.css']

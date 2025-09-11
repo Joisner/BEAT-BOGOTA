@@ -24,10 +24,8 @@ export interface AppUser {
   id: string;
   email: string;
   role: string;
-  is_admin: boolean;
-  is_promotor: boolean;
-  is_assistant: boolean;
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +34,10 @@ export class AuthService {
   environment = environment;
   private app: FirebaseApp;
   private auth: Auth;
-  private currentUserSubject = new BehaviorSubject<AppUser | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private currentUserSubject: BehaviorSubject<AppUser | null>;
+  public currentUser$: Observable<AppUser | null>;
+
+  private readonly USER_STORAGE_KEY = 'currentUser';
 
   constructor(
     private http: HttpClient,
@@ -46,6 +46,13 @@ export class AuthService {
     this.app = initializeApp(environment.firebaseConfig);
     getAnalytics(this.app);
     this.auth = getAuth(this.app);
+    
+    // Intentar cargar el usuario del localStorage al inicio
+    const savedUser = localStorage.getItem(this.USER_STORAGE_KEY);
+    const initialUser = savedUser ? JSON.parse(savedUser) : null;
+    this.currentUserSubject = new BehaviorSubject<AppUser | null>(initialUser);
+    this.currentUser$ = this.currentUserSubject.asObservable();
+    
     this.setupAuthStateListener();
   }
   
@@ -102,6 +109,22 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  async refreshToken(): Promise<string | null> {
+    try {
+      const currentUser = this.auth.currentUser;
+      if (!currentUser) {
+        return null;
+      }
+      const token = await currentUser.getIdToken(true); // Force token refresh
+      localStorage.setItem('firebase_token', token);
+      return token;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      this.logout();
+      return null;
+    }
+  }
+
   getToken(): string | null {
     return localStorage.getItem('firebase_token');
   }
@@ -136,13 +159,15 @@ export class AuthService {
 
       // Update the current user with the verified user data
       this.currentUserSubject.next(response);
+      // Guardar en localStorage
+      localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(response));
       
       // Redirigir según el rol del usuario
-      if (response.is_admin) {
+      if (response.role === 'admin') {
         this.router.navigate(['/admin/events']);
-      } else if (response.is_promotor) {
+      } else if (response.role === 'promotor') {
         this.router.navigate(['/promotor']);
-      } else if (response.is_assistant) {
+      } else if (response.role === 'asistente') {
         this.router.navigate(['/asistente']);
       } else {
         // Redirigir a la página por defecto si no tiene un rol específico
@@ -163,6 +188,7 @@ export class AuthService {
 
   private clearUserData(): void {
     localStorage.removeItem('firebase_token');
+    localStorage.removeItem(this.USER_STORAGE_KEY);
     this.currentUserSubject.next(null);
   }
 }

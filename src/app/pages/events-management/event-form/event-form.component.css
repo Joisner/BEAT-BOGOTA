@@ -12,7 +12,9 @@
 }
 
 /* Smooth focus transitions */
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   transform: translateY(-2px);
 }
 
@@ -28,8 +30,13 @@ button:not(:disabled):hover {
 
 /* Gradient animation for background */
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .animate-gradient {
@@ -47,7 +54,8 @@ button:not(:disabled):hover {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
   }
   50% {

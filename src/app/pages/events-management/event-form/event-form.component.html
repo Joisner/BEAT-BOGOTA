@@ -15,7 +15,7 @@
       
       <div class="text-center">
         <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-4">
-          CREAR EVENTO
+          {{pageTitle}}
         </h1>
         <p class="text-xl text-gray-300 max-w-2xl mx-auto">
           Dale vida a tu evento de música electrónica. Completa los detalles y prepárate para hacer historia.
@@ -258,31 +258,13 @@
             </label>
             <select id="promotores" formControlName="promotores" multiple
               class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
-              <option *ngFor="let promotor of promotores" [value]="promotor.user_id">{{ promotor.name }}</option>
+              <option *ngFor="let promotor of promotores" [value]="promotor.id">{{ promotor.name }}</option>
             </select>
             <p class="mt-2 text-gray-400 text-sm">Selecciona uno o varios promotores responsables del evento.</p>
             @if (eventForm.get('promotores')?.invalid && eventForm.get('promotores')?.touched) {
               <p class="mt-2 text-red-400 flex items-center">
                 <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
                 Debes seleccionar al menos un promotor
-              </p>
-            }
-          </div>
-
-          <!-- Etapas de boleta -->
-          <div class="mb-8">
-            <label for="etapas" class="block text-lg font-semibold text-gray-200 mb-3">
-              Etapas de Boleta
-            </label>
-            <select id="etapas" formControlName="etapas" multiple
-              class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
-              <option *ngFor="let etapa of etapas" [value]="etapa.id">{{ etapa.nombre }} ({{ etapa.precio | currency:'COP':'symbol' }})</option>
-            </select>
-            <p class="mt-2 text-gray-400 text-sm">Selecciona una o varias etapas de boleta para este evento.</p>
-            @if (eventForm.get('etapas')?.invalid && eventForm.get('etapas')?.touched) {
-              <p class="mt-2 text-red-400 flex items-center">
-                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
-                Debes seleccionar al menos una etapa
               </p>
             }
           </div>
@@ -398,17 +380,22 @@
         <!-- Submit Button -->
         <div class="text-center pt-8 border-t border-gray-700/50">
           <button type="submit" 
-                  [disabled]="eventForm.invalid"
+                  [disabled]="eventForm.invalid || isSubmitting"
                   class="group relative inline-flex items-center justify-center px-12 py-6 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-black text-xl rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 disabled:hover:scale-100 disabled:hover:shadow-none">
             <div class="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div class="relative flex items-center">
-              <lucide-icon name="sparkles" class="mr-3 h-6 w-6 group-hover:animate-spin"></lucide-icon>
-              <span>Crear Evento Épico</span>
+              @if (isSubmitting) {
+                <lucide-icon name="loader-2" class="mr-3 h-6 w-6 animate-spin"></lucide-icon>
+                <span>Creando...</span>
+              } @else {
+                <lucide-icon name="sparkles" class="mr-3 h-6 w-6 group-hover:animate-spin"></lucide-icon>
+                <span>{{submitButtonText}}</span>
+              }
             </div>
           </button>
           
           <p class="mt-4 text-gray-400 text-sm">
-            Una vez creado, tu evento estará disponible para todos los amantes de la música electrónica
+            Una vez creado, podrás asignar etapas de boleta al evento
           </p>
         </div>
       </form>

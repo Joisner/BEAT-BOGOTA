@@ -26,13 +26,43 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    debugger;
-    // Get return url from route parameters or default to '/dashboard'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    // Obtener el usuario guardado
+    const savedUser = localStorage.getItem('currentUser');
     
-    // Redirect if already logged in
+    // Si hay un usuario guardado, redirigir según su rol
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      this.redirectBasedOnRole(user);
+      return;
+    }
+    
+    // Si no hay usuario guardado pero está autenticado, obtener el usuario actual
     if (this.authService.isAuthenticated()) {
-      this.router.navigate([this.returnUrl]);
+      const subscription = this.authService.currentUser$.subscribe({
+        next: (user) => {
+          if (user) {
+            this.redirectBasedOnRole(user);
+            subscription.unsubscribe(); // Importante: desuscribirse para evitar fugas de memoria
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener el usuario actual:', error);
+          subscription.unsubscribe();
+        }
+      });
+    }
+  }
+
+  // Método auxiliar para redirigir según el rol
+  private redirectBasedOnRole(user: any): void {
+    if (user.role === 'admin') {
+      this.router.navigate(['/admin/events']);
+    } else if (user.role === 'promotor') {
+      this.router.navigate(['/promotor']);
+    } else if (user.role === 'asistente') {
+      this.router.navigate(['/asistente']);
+    } else {
+      this.router.navigate(['/events']);
     }
   }
 
@@ -47,7 +77,7 @@ export class LoginComponent implements OnInit {
 
     try {
       await this.authService.login(this.email, this.password);
-      this.router.navigate([this.returnUrl]);
+      // No es necesario redirigir aquí, ya que el servicio se encarga de eso
     } catch (error: any) {
       this.error = error.message || 'Error al iniciar sesión. Por favor intente de nuevo.';
       console.error('Login error:', error);

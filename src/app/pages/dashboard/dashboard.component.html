@@ -50,7 +50,7 @@
               <div class="grid grid-cols-2 gap-4">
                 <div class="bg-gray-700/50 p-4 rounded-lg">
                   <p class="text-sm text-gray-400">Tipo de Usuario</p>
-                  <p class="font-medium text-white">{{ currentUser.is_admin ? 'Administrador' : 'Usuario' }}</p>
+                  <p class="font-medium text-white">{{ currentUser.role === 'admin' || currentUser.role === 'promotor' || currentUser.role === 'asistente' ? 'Administrador' : 'Usuario' }}</p>
                 </div>
                 <div class="bg-gray-700/50 p-4 rounded-lg">
                   <p class="text-sm text-gray-400">Estado</p>

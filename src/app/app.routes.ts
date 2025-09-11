@@ -1,4 +1,3 @@
-// ...existing code...
 import { Routes } from '@angular/router';
 import { EventsComponent } from './pages/events-management/events/events.component';
 import { EventFormComponent } from './pages/events-management/event-form/event-form.component';
@@ -10,25 +9,40 @@ import { DescuentoListComponent } from './pages/admin/descuento-list/descuento-l
 import { DescuentoFormComponent } from './pages/admin/descuento-form/descuento-form.component';
 import { EtapaBoletaListComponent } from './pages/admin/etapa-boleta-list/etapa-boleta-list.component';
 import { EtapaBoletaFormComponent } from './pages/admin/etapa-boleta-form/etapa-boleta-form.component';
-
+import { AuthGuard } from './core/guards/auth.guard';
+import { PromoterFormComponent } from './pages/admin/promoter-form/promoter-form.component';
+import {UsersListComponent} from './pages/admin/users-list/users-list.component';
+import {UsersFormComponent} from './pages/admin/users-form/users-form.component';
 export const routes: Routes = [
-    // Admin Routes
-    { path: 'admin/events', component: EventListComponent },
-    { path: 'admin/events/new', component: EventFormComponent },
-    { path: 'admin/events/edit/:id', component: EventFormComponent },
+    // Admin Routes - Protected with AuthGuard
+    { 
+      path: 'admin',
+      canActivate: [AuthGuard],
+      children: [
+        {path: 'users', component: UsersListComponent},
+        {path: 'users/new', component: UsersFormComponent},
+        {path: 'users/edit/:id', component: UsersFormComponent},
 
-    // Promotores autorizados
-    { path: 'admin/promotores', component: PromotorListComponent },
-
-    // Descuentos
-    { path: 'admin/descuentos', component: DescuentoListComponent },
-    { path: 'admin/descuentos/new', component: DescuentoFormComponent },
-    { path: 'admin/descuentos/edit/:id', component: DescuentoFormComponent },
-
-    // Etapas de boletas
-    { path: 'admin/etapas-boleta', component: EtapaBoletaListComponent },
-    { path: 'admin/etapas-boleta/new', component: EtapaBoletaFormComponent },
-    { path: 'admin/etapas-boleta/edit/:id', component: EtapaBoletaFormComponent },
+        { path: 'events', component: EventListComponent },
+        { path: 'events/new', component: EventFormComponent },
+        { path: 'events/edit/:id', component: EventFormComponent },
+        
+        // Promotores autorizados
+        { path: 'promotores', component: PromotorListComponent },
+        { path: 'promoters/new', component: PromoterFormComponent},
+        { path: 'promoters/edit/:id', component: PromoterFormComponent},
+        
+        // Descuentos
+        { path: 'descuentos', component: DescuentoListComponent },
+        { path: 'descuentos/new', component: DescuentoFormComponent },
+        { path: 'descuentos/edit/:id', component: DescuentoFormComponent },
+        
+        // Etapas de boletas
+        { path: 'etapas-boleta', component: EtapaBoletaListComponent },
+        { path: 'etapas-boleta/new', component: EtapaBoletaFormComponent },
+        { path: 'etapas-boleta/edit/:id', component: EtapaBoletaFormComponent },
+      ]
+    },
 
 
     // Public Routes
