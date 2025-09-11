@@ -1,53 +1,135 @@
-/* Custom animations and effects */
-.bg-size-200 {
-  background-size: 200% 200%;
+/* Table styles */
+.table-container {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.bg-pos-0 {
-  background-position: 0% 50%;
+table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-.bg-pos-100 {
-  background-position: 100% 50%;
+th {
+  background-color: rgba(17, 24, 39, 0.5);
+  color: #d8b4fe;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(76, 29, 149, 0.3);
 }
 
-/* Smooth focus transitions */
-input:focus,
-textarea:focus,
-select:focus {
+td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.2);
+  vertical-align: middle;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background-color: rgba(31, 41, 55, 0.4);
+}
+
+/* Action buttons */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.edit-btn {
+  color: #67e8f9;
+}
+
+.edit-btn:hover {
+  color: #22d3ee;
+}
+
+.delete-btn {
+  color: #f472b6;
+}
+
+.delete-btn:hover {
+  color: #ec4899;
+}
+
+/* Loading state */
+.loading-spinner {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 0.25rem solid rgba(168, 85, 247, 0.3);
+  border-radius: 50%;
+  border-top-color: #a855f7;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table-container {
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 640px;
+  }
+}
+
+/* Button styles */
+.create-btn {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  color: white;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.create-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Custom radio button animations */
-input[type="radio"]:checked + div {
-  transform: scale(1.02);
+.create-btn:active {
+  transform: translateY(0);
 }
 
-/* Glowing effect for submit button */
-button:not(:disabled):hover {
-  filter: drop-shadow(0 0 30px rgba(147, 51, 234, 0.4));
+.create-btn svg {
+  margin-right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
-
-/* Gradient animation for background */
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient {
-  animation: gradient-shift 8s ease infinite;
-}
-
-/* Custom toggle switch animation */
-.toggle-switch {
-  transition: all 0.3s ease;
-}
-
 /* Pulse effect for featured badge */
 .pulse-glow {
   animation: pulse-glow 2s infinite;

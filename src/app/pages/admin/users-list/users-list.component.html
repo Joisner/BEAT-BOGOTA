@@ -1,61 +1,74 @@
-<div class="min-h-screen bg-black relative overflow-hidden">
-    <!-- Animated Background -->
-    <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
-    <div
-        class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500/5 via-transparent to-transparent animate-pulse">
+<div class="min-h-screen bg-gray-900 text-white p-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-black text-purple-400">Gestionar Usuarios</h1>
+      <a routerLink="/admin/users/new"
+        class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full hover:scale-105 transition-transform duration-300 hover:shadow-2xl hover:shadow-purple-500/25">
+        <lucide-icon name="plus" class="mr-2 h-6 w-6"></lucide-icon>
+        Nuevo Usuario
+      </a>
     </div>
 
-    <div class="container mx-auto px-6 py-12 max-w-7xl relative z-10">
-
-        <!-- Header Section -->
-        <div class="mb-12">
-            <div class="flex justify-between items-center">
-                <h1
-                    class="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                    Usuarios de la Plataforma
-                </h1>
-                <a routerLink="/admin/users/new"
-                    class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-black text-lg rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                    <div class="relative flex items-center">
-                        <lucide-icon name="plus" class="mr-3 h-6 w-6"></lucide-icon>
-                        Nuevo Usuario
-                    </div>
+    <div class="bg-gray-800/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl shadow-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-left text-gray-300">
+          <thead class="text-xs text-purple-300 uppercase bg-gray-900/80">
+            <tr>
+              <th scope="col" class="px-6 py-4">Email</th>
+              <th scope="col" class="px-6 py-4">Rol</th>
+              <th scope="col" class="px-6 py-4 text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="users.length; else loading">
+            <tr *ngFor="let user of users" class="border-b border-gray-700 hover:bg-gray-800/70 transition-colors duration-200">
+              <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ user.email }}</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                  [ngClass]="{
+                    'bg-purple-100 text-purple-800': user.role === 'admin',
+                    'bg-blue-100 text-blue-800': user.role === 'promoter',
+                    'bg-green-100 text-green-800': user.role === 'assistant'
+                  }">
+                  {{ user.role | titlecase }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <a [routerLink]="['/admin/users/edit', user.id]" 
+                   class="text-cyan-400 hover:text-cyan-300 mr-4 font-semibold transition-colors duration-200 inline-flex items-center"
+                   [class.opacity-50]="isDeleting(user.id)"
+                   [class.pointer-events-none]="isDeleting(user.id)">
+                  <lucide-icon name="pencil" class="inline-block h-5 w-5"></lucide-icon>
+                  <span class="ml-1">Editar</span>
                 </a>
-            </div>
-        </div>
-
-        <!-- Table Container -->
-        <div
-            class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-700/50 rounded-3xl shadow-2xl overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-sm text-left text-gray-300">
-                    <thead class="text-xs text-purple-300 uppercase bg-gray-900/80">
-                        <tr>
-                            <th class="px-6 py-4 font-bold">Email</th>
-                            <th class="px-6 py-4 font-bold">Rol</th>
-                            <th class="px-6 py-4 font-bold">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="users.length; else loading">
-                        <tr *ngFor="let user of users" class="">
-                            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ user.email }}</td>
-                            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">{{ user.role }}</td>
-                            <td class="px-6 py-4 text-center font-medium text-white whitespace-nowrap">
-                                <button class="px-3 py-1 rounded bg-red-700 text-white hover:bg-red-800 transition">
-                                    Eliminar
-                                </button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                    <ng-template #loading>
-                        <app-loading [title]="'Cargando usuarios...'"></app-loading>
-                    </ng-template>
-                </table>
-            </div>
-        </div>
+                <button (click)="deleteUser(user.id)" 
+                        [disabled]="isDeleting(user.id)"
+                        [class.opacity-70]="isDeleting(user.id)"
+                        class="text-pink-500 hover:text-pink-400 font-semibold transition-colors duration-200 inline-flex items-center">
+                  <span *ngIf="isDeleting(user.id)" class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-pink-500 border-t-transparent mr-1"></span>
+                  <lucide-icon *ngIf="!isDeleting(user.id)" name="trash-2" class="inline-block h-5 w-5"></lucide-icon>
+                  <span class="ml-1">{{ isDeleting(user.id) ? 'Eliminando...' : 'Eliminar' }}</span>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!loading && users.length === 0">
+              <td colspan="3" class="px-6 py-12 text-center text-gray-400">
+                <div class="flex flex-col items-center">
+                  <lucide-icon name="users" class="h-12 w-12 text-gray-600 mb-2"></lucide-icon>
+                  <p class="text-lg font-medium">No hay usuarios</p>
+                  <p class="text-sm mt-1">¡Crea el primer usuario para comenzar!</p>
+                  <a routerLink="/admin/users/new" class="mt-4 inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-sm font-medium hover:shadow-lg hover:scale-105 transition-all">
+                    <lucide-icon name="plus" class="h-4 w-4 mr-1"></lucide-icon>
+                    Crear Usuario
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <ng-template #loading>
+            <app-loading [title]="'Cargando usuarios...'"></app-loading>
+          </ng-template>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

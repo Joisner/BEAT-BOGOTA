@@ -1,4 +1,4 @@
-export interface Promotor {
+export interface Promoter {
   id: string;
   name: string;
   user_email: string;

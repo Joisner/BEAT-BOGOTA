@@ -3,14 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsModule } from '../../../core/module/icons.module';
-import { PromotorService } from '../../../core/services/promotor.service';
+import { PromoterService } from '../../../core/services/promoter.service';
 import { FormValidationService } from '../../../core/services/form-validation.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { Promotor } from '../../../core/models/promotor.model';
+import { Promoter } from '../../../core/models/promoter.model';
+import { UserService } from '../../../core/services/user.service';
+import { UserAuth } from '../../../core/models/users.model';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-promoter-form',
@@ -20,43 +23,36 @@ import { Promotor } from '../../../core/models/promotor.model';
   styleUrl: './promoter-form.component.css'
 })
 export class PromoterFormComponent {
-  promotorForm!: FormGroup
+  promoterForm!: FormGroup
   isSubmitting = false
-  editMode = false
-  private promotorId: string | null = null
+  isEditMode = false
+  private promoterId: string | null = null
   pageTitle = "Crear Nuevo Promotor"
   submitButtonText = "Crear Promotor"
-
+  promoters: UserAuth[] = []
   constructor(
     private fb: FormBuilder,
-    private promotorService: PromotorService,
+    private promoterService: PromoterService,
     private formValidationService: FormValidationService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+    private userService: UserService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.initForm()
     this.checkMode()
+    this.getPromoters()
   }
 
   private initForm(): void {
-    this.promotorForm = this.fb.group({
+    this.promoterForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(2)]],
+      lastname: ["", [Validators.required, Validators.minLength(2)]],
       email: ["", [Validators.required, Validators.email]],
       phone: ["", [Validators.required]],
-      bio: ["", [Validators.maxLength(500)]],
-      socialMedia: this.fb.group({
-        instagram: [""],
-        facebook: [""],
-        twitter: [""],
-        website: [""],
-      }),
-      profileImage: [""],
-      specialties: [""],
-      experience: ["", [Validators.min(0)]],
-      location: [""],
-      featured: [false],
+      promotores: this.fb.control([])
     })
   }
 
@@ -64,21 +60,43 @@ export class PromoterFormComponent {
     this.route.paramMap.subscribe((params) => {
       const id = params.get("id")
       if (id) {
-        this.editMode = true
-        this.promotorId = id
+        this.isEditMode = true
+        this.promoterId = id
         this.pageTitle = "Editar Promotor"
         this.submitButtonText = "Guardar Cambios"
-        this.loadPromotorData(this.promotorId)
+        this.loadPromoterData(this.promoterId)
       }
     })
   }
 
-  private loadPromotorData(id: string): void {
-    this.promotorService.getPromotor(id).subscribe({
-      next: (promotor: Promotor) => {
-        if (promotor) {
-          this.promotorForm.patchValue({
-            ...promotor,
+  get hasPromoters(): boolean {
+    return this.promoters && this.promoters.length > 0;
+  }
+
+  private updateFormState(): void {
+    if (!this.hasPromoters && !this.isEditMode) {
+      this.promoterForm.disable();
+    } else {
+      this.promoterForm.enable();
+    }
+  }
+
+  getPromoters(): void {
+    this.userService.getUsers().subscribe({
+      next: (promoters: UserAuth[]) => {
+        this.promoters = promoters.filter((user: UserAuth) => user.role === 'promoter')
+        this.updateFormState();
+      },
+      error: () => this.router.navigate(["/admin/promotores"]),
+    });
+  }
+  private loadPromoterData(id: string): void {
+    this.promoterService.getPromoter(id).subscribe({
+      next: (promoter: Promoter) => {
+        debugger;
+        if (promoter) {
+          this.promoterForm.patchValue({
+            ...promoter,
           })
         } else {
           this.router.navigate(["/admin/promotores"])
@@ -88,24 +106,49 @@ export class PromoterFormComponent {
     })
   }
 
+  onPromoterSelectionChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const selectedIds = Array.from(select.selectedOptions).map(opt => opt.value);
+    
+    console.log('🎯 Selected IDs:', selectedIds);
+    
+    if (selectedIds.length > 0) {
+      const selectedPromoter = this.promoters.find(p => p.id === selectedIds[0].split("'")[1]);
+      
+      if (selectedPromoter) {
+        console.log('🎯 Found promoter:', selectedPromoter);
+        
+        this.promoterForm.patchValue({
+          name: selectedPromoter.name,
+          lastname: selectedPromoter.lastname, // Make sure this matches the form control name
+          email: selectedPromoter.email,
+        });
+        
+        console.log('🎯 Form values after patch:', this.promoterForm.value);
+      }
+    }
+  }
+
+
+
   onSubmit(): void {
-    if (this.promotorForm.invalid) {
-      this.promotorForm.markAllAsTouched()
+    if (this.promoterForm.invalid) {
+      this.promoterForm.markAllAsTouched()
       this.showFormErrors()
       return
     }
 
     this.isSubmitting = true
-    const formValue = this.promotorForm.value
+    const formValue = this.promoterForm.value
 
     const specialties = formValue.specialties
       ? formValue.specialties
-          .split(",")
-          .map((specialty: string) => specialty.trim())
-          .filter((specialty: string) => specialty)
+        .split(",")
+        .map((specialty: string) => specialty.trim())
+        .filter((specialty: string) => specialty)
       : []
 
-    const promotorData: Partial<Promotor> = {
+    const promoterData: Partial<Promoter> = {
       name: formValue.name,
       user_email: formValue.email,
       phone: formValue.phone,
@@ -114,15 +157,16 @@ export class PromoterFormComponent {
     }
 
     const operation =
-      this.editMode && this.promotorId
-        ? this.promotorService.updatePromotor(this.promotorId, promotorData)
-        : this.promotorService.createPromotor(promotorData as Promotor)
+      this.isEditMode && this.promoterId
+        ? this.promoterService.updatePromoter(this.promoterId, promoterData)
+        : this.promoterService.createPromoter(promoterData as Promoter)
 
     operation.subscribe({
       next: (result) => {
         this.showSuccessMessage()
         setTimeout(() => {
           this.router.navigate(["/admin/promotores"])
+          this.notificationService.success(`Promotor ${this.isEditMode ? 'actualizado' : 'creado'} exitosamente`)
         }, 1500)
       },
       error: (err) => {
@@ -142,34 +186,34 @@ export class PromoterFormComponent {
   }
 
   private showSuccessMessage(): void {
-    const message = this.editMode 
-      ? '¡Promotor actualizado exitosamente!' 
+    const message = this.isEditMode
+      ? '¡Promotor actualizado exitosamente!'
       : '¡Promotor creado exitosamente!';
     this.formValidationService.showSuccessMessage(message);
   }
 
   private showErrorMessage(): void {
-    const message = this.editMode
+    const message = this.isEditMode
       ? 'Error al actualizar el promotor. Por favor intenta de nuevo.'
       : 'Error al crear el promotor. Por favor intenta de nuevo.';
     this.formValidationService.showErrorMessage(message);
   }
 
   isFieldInvalid(fieldName: string): boolean {
-    return this.formValidationService.isFieldInvalid(this.promotorForm, fieldName);
+    return this.formValidationService.isFieldInvalid(this.promoterForm, fieldName);
   }
 
   isNestedFieldInvalid(groupName: string, fieldName: string): boolean {
-    return this.formValidationService.isNestedFieldInvalid(this.promotorForm, groupName, fieldName);
+    return this.formValidationService.isNestedFieldInvalid(this.promoterForm, groupName, fieldName);
   }
 
   getFieldError(fieldName: string): string {
-    const field = this.promotorForm.get(fieldName);
+    const field = this.promoterForm.get(fieldName);
     return this.formValidationService.getFieldError(field);
   }
 
   previewImage(): string | null {
-    const imageUrl = this.promotorForm.get("profileImage")?.value
+    const imageUrl = this.promoterForm.get("profileImage")?.value
     if (imageUrl && this.isValidUrl(imageUrl)) {
       return imageUrl
     }
@@ -186,7 +230,7 @@ export class PromoterFormComponent {
   }
 
   resetForm(): void {
-    this.promotorForm.reset({
+    this.promoterForm.reset({
       featured: false,
     })
   }

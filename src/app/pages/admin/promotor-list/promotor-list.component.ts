@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PromotorService } from '../../../core/services/promotor.service';
-import { Promotor } from '../../../core/models/promotor.model';
+import { PromoterService } from '../../../core/services/promoter.service';
+import { Promoter } from '../../../core/models/promoter.model';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsModule } from '../../../core/module/icons.module';
@@ -15,18 +15,18 @@ import { LoadingComponent } from '../../../single-pages/loading/loading.componen
     styleUrls: ['./promotor-list.component.css']
 })
 export class PromotorListComponent implements OnInit {
-    promotores: Promotor[] = []
+    promoters: Promoter[] = []
 
-    constructor(private promotorService: PromotorService) {}
+    constructor(private promoterService: PromoterService) {}
   
     ngOnInit(): void {
-      this.loadPromotores()
+      this.loadPromoters()
     }
   
-    private loadPromotores(): void {
-      this.promotorService.getPromotores().subscribe({
-        next: (promotores) => {
-          this.promotores = promotores
+    private loadPromoters(): void {
+      this.promoterService.getPromoters().subscribe({
+        next: (promoters) => {
+          this.promoters = promoters
         },
         error: (error) => {
           console.error(`No fue posible cargar promotores ${error}`)
@@ -34,11 +34,11 @@ export class PromotorListComponent implements OnInit {
       })
     }
   
-    eliminarPromotor(id: string): void {
+    deletePromoter(id: string): void {
       if (confirm("¿Estás seguro de que deseas eliminar este promotor?")) {
-        this.promotorService.deletePromotor(id).subscribe({
+        this.promoterService.deletePromoter(id).subscribe({
           next: () => {
-            this.loadPromotores() // Reload the list
+            this.loadPromoters() // Reload the list
             console.log("Promotor eliminado exitosamente")
           },
           error: (error) => {

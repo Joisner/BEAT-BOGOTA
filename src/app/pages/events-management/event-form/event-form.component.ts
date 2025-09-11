@@ -6,8 +6,8 @@ import { EventService } from '../../../core/services/event.service';
 import { IconsModule } from '../../../core/module/icons.module';
 import { LucideAngularModule } from 'lucide-angular';
 import { Event } from '../../../core/models/event.model';
-import { PromotorService } from '../../../core/services/promotor.service';
-import { Promotor } from '../../../core/models/promotor.model';
+import { PromoterService } from '../../../core/services/promoter.service';
+import { Promoter } from '../../../core/models/promoter.model';
 import { EtapaBoletaService } from '../../../core/services/etapa-boleta.service';
 import { EtapaBoleta } from '../../../core/models/etapa-boleta.model';
 
@@ -31,12 +31,15 @@ export class EventFormComponent implements OnInit {
   pageTitle = "Crear Nuevo Evento"
   submitButtonText = "Crear Evento"
 
-  promotores: Promotor[] = []
+  promoters: Promoter[] = []
 
+  loading: boolean = false;
+  selectedTags: string[] = [];
+  
   constructor(
     private fb: FormBuilder,
     private eventService: EventService,
-    private promotorService: PromotorService,
+    private promoterService: PromoterService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
@@ -73,9 +76,9 @@ export class EventFormComponent implements OnInit {
   }
 
   private loadPromotores(): void {
-    this.promotorService.getPromotores().subscribe({
-      next: (promotores) => {
-        this.promotores = promotores
+    this.promoterService.getPromoters().subscribe({
+      next: (promoters) => {
+        this.promoters = promoters
       },
       error: (error) => {
         console.error(`No fue posible cargar promotores ${error}`)
@@ -306,5 +309,9 @@ export class EventFormComponent implements OnInit {
       price: { currency: "COP" },
       featured: false,
     })
+  }
+
+  removeTag(tag: string): void {
+    this.selectedTags = this.selectedTags.filter((t) => t !== tag)
   }
 }

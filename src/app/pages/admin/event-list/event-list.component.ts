@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Event } from '../../../core/models/event.model';
 import { EventService } from '../../../core/services/event.service';
-import { PromotorService } from '../../../core/services/promotor.service';
-import { Promotor } from '../../../core/models/promotor.model';
+import { PromoterService } from '../../../core/services/promoter.service';
+import { Promoter } from '../../../core/models/promoter.model';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsModule } from '../../../core/module/icons.module';
 
@@ -19,20 +19,20 @@ import { IconsModule } from '../../../core/module/icons.module';
 export class EventListComponent implements OnInit {
 
   events$!: Observable<Event[]>;
-  promotores: Promotor[] = [];
+  promoters: Promoter[] = [];
 
-  constructor(private eventService: EventService, private promotorService: PromotorService) {}
+  constructor(private eventService: EventService, private promoterService: PromoterService) {}
 
   ngOnInit(): void {
     this.events$ = this.eventService.getEvents();
-    this.promotorService.getPromotores().subscribe(promotores => {
-      this.promotores = promotores;
+    this.promoterService.getPromoters().subscribe((promoters: Promoter[]) => {
+      this.promoters = promoters;
     });
   }
 
   getPromotorNombres(ids: string[]): string {
     if (!ids || !Array.isArray(ids)) return '';
-    return this.promotores
+    return this.promoters
       .filter(p => ids.includes(p.id))
       .map(p => p.name)
       .join(', ');
