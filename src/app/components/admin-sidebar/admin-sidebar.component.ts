@@ -32,16 +32,16 @@ export class AdminSidebarComponent {
       icon: 'users', 
       expanded: false, // Cambiado a false por defecto
       children: [
-        { name: 'Profile', icon: 'user', href: '/admin/users/profile' },
+        /* { name: 'Profile', icon: 'user', href: '/admin/users/profile' }, */
         { name: 'Manage Users', icon: 'users', href: '/admin/users' },
-        { name: 'Permissions', icon: 'shield', href: '/admin/users/permissions' }
+        /* { name: 'Permissions', icon: 'shield', href: '/admin/users/permissions' } */
       ]
     },
-    { name: 'Eventos',        icon: 'calendar-days', href: '/admin/events' },
     { name: 'Promotores',     icon: 'users',         href: '/admin/promotores' },
-    { name: 'Descuentos',     icon: 'percent',       href: '/admin/descuentos', badge: 3 },
+    { name: 'Eventos',        icon: 'calendar-days', href: '/admin/events' },
     { name: 'Etapas de Boleta', icon: 'layers',      href: '/admin/etapas-boleta' },
-    {
+    { name: 'Descuentos',     icon: 'percent',       href: '/admin/descuentos', badge: 3 },
+    /* {
       name: 'Reportes',
       icon: 'bar-chart-3',
       expanded: false,
@@ -60,7 +60,7 @@ export class AdminSidebarComponent {
         { name: 'Security', icon: 'lock', href: '/admin/config/security', badge: 2 },
         { name: 'Notifications', icon: 'bell', href: '/admin/config/notifications' }
       ]
-    }
+    } */
   ];
 
   onToggleClick() {

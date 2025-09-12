@@ -14,20 +14,20 @@
         <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-700/50 overflow-hidden">
             <!-- Header -->
             <div class="p-6 border-b border-gray-700">
-                <h1 class="text-2xl md:text-3xl font-bold text-white">Crear Nuevo Evento</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-white">{{editMode ? 'Editar Evento' : 'Crear Evento'}}</h1>
                 <p class="text-gray-300 mt-1">
-                    Completa la información para crear un nuevo evento.
+                    {{editMode ? 'Completa la información para editar el evento.' : 'Completa la información para crear un nuevo evento.'}}
                 </p>
             </div>
 
             <!-- Form -->
-            <form class="p-6 md:p-8">
+            <form class="p-6 md:p-8" [formGroup]="eventForm" (ngSubmit)="onSubmit()">
                 <!-- Basic Info Section -->
                 <div class="mb-8">
                     <div class="flex items-center mb-6">
                         <div
                             class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center mr-3">
-                            <lucide-icon data-lucide="info" class="h-5 w-5 text-white"></lucide-icon>
+                            <lucide-icon name="info" class="h-5 w-5 text-white"></lucide-icon>
                         </div>
                         <h2 class="text-xl font-semibold text-white">Información Básica</h2>
                     </div>
@@ -38,8 +38,14 @@
                             <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
                                 Nombre del Evento
                             </label>
-                            <input type="text" id="name" placeholder="ej. TECHNO INVASION 2024"
+                            <input type="text" id="name" formControlName="name" placeholder="ej. TECHNO INVASION 2024"
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
+                            @if (eventForm.get('name')?.invalid && eventForm.get('name')?.touched) {
+                            <p class="mt-2 text-red-400 flex items-center">
+                                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                                El nombre es requerido (mínimo 3 caracteres)
+                            </p>
+                            }
                         </div>
 
                         <!-- Date -->
@@ -47,8 +53,14 @@
                             <label for="date" class="block text-sm font-medium text-gray-300 mb-2">
                                 Fecha y Hora
                             </label>
-                            <input type="datetime-local" id="date"
+                            <input type="datetime-local" id="date" formControlName="date"
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
+                            @if (eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
+                            <p class="mt-2 text-red-400 flex items-center">
+                                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                                La fecha y hora son requeridas
+                            </p>
+                            }
                         </div>
 
                         <!-- Genre -->
@@ -56,7 +68,7 @@
                             <label for="genre" class="block text-sm font-medium text-gray-300 mb-2">
                                 Género Musical
                             </label>
-                            <select id="genre"
+                            <select id="genre" formControlName="genre"
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
                                 <option value="">Seleccionar género</option>
                                 <option value="Techno">Techno</option>
@@ -68,6 +80,12 @@
                                 <option value="Dubstep">Dubstep</option>
                                 <option value="Multi-género">Multi-género</option>
                             </select>
+                            @if (eventForm.get('genre')?.invalid && eventForm.get('genre')?.touched) {
+                            <p class="mt-2 text-red-400 flex items-center">
+                                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                                El género musical es requerido
+                            </p>
+                            }
                         </div>
 
                         <!-- Location -->
@@ -75,8 +93,15 @@
                             <label for="location" class="block text-sm font-medium text-gray-300 mb-2">
                                 Ubicación
                             </label>
-                            <input type="text" id="location" placeholder="ej. Warehouse 47, Bogotá"
+                            <input type="text" id="location" formControlName="location"
+                                placeholder="ej. Warehouse 47, Bogotá"
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
+                            @if (eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
+                            <p class="mt-2 text-red-400 flex items-center">
+                                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                                La ubicación es requerida
+                            </p>
+                            }
                         </div>
                     </div>
                 </div>
@@ -97,9 +122,15 @@
                             <label for="description" class="block text-sm font-medium text-gray-300 mb-2">
                                 Descripción
                             </label>
-                            <textarea id="description" rows="6"
+                            <textarea id="description" formControlName="description" rows="6"
                                 placeholder="Describe la experiencia que vivirán los asistentes..."
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                            @if (eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
+                            <p class="mt-2 text-red-400 flex items-center">
+                                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                                La descripción es requerida (máximo 500 caracteres)
+                            </p>
+                            }
                         </div>
 
                         <!-- Image URL -->
@@ -107,7 +138,8 @@
                             <label for="imageUrl" class="block text-sm font-medium text-gray-300 mb-2">
                                 URL de la Imagen del Evento
                             </label>
-                            <input type="url" id="imageUrl" placeholder="https://ejemplo.com/imagen-evento.jpg"
+                            <input type="url" id="imageUrl" formControlName="imageUrl"
+                                placeholder="https://ejemplo.com/imagen-evento.jpg"
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
                             <p class="mt-1 text-gray-400 text-sm">
                                 Agrega una imagen atractiva que represente tu evento
@@ -119,7 +151,7 @@
                             <label for="capacity" class="block text-sm font-medium text-gray-300 mb-2">
                                 Capacidad (opcional)
                             </label>
-                            <input type="number" id="capacity" placeholder="ej. 500" min="1"
+                            <input type="number" id="capacity" formControlName="capacity" placeholder="ej. 500" min="1"
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
                         </div>
 
@@ -127,12 +159,12 @@
                         <div class="form-group flex items-center">
                             <div>
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only" onchange="toggleFeatured(this)">
+                                    <input type="checkbox" formControlName="featured" class="sr-only">
                                     <div class="relative">
-                                        <div id="toggle-bg"
+                                        <div
                                             class="w-12 h-6 bg-gray-600 rounded-full shadow-inner transition-colors duration-300">
                                         </div>
-                                        <div id="toggle-dot"
+                                        <div
                                             class="absolute w-4 h-4 bg-white rounded-full shadow top-1 translate-x-1 left-0 transition-transform duration-300">
                                         </div>
                                     </div>
@@ -144,23 +176,28 @@
                     </div>
                 </div>
 
-                <!-- Pricing Section -->
+                <!-- Promotores responsables -->
                 <div class="mb-8">
-                    <div class="flex items-center mb-6">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center mr-3">
-                            <lucide-icon name="dollar-sign" class="h-5 w-5 text-white"></lucide-icon>
-                        </div>
-                        <h2 class="text-xl font-semibold text-white">Precios</h2>
-                    </div>
-                    <!-- Pricing content would go here -->
-                    <div class="bg-gray-700/30 rounded-lg p-6">
-                        <p class="text-gray-400">Sección de precios en construcción...</p>
-                    </div>
+                    <label for="promotores" class="block text-lg font-semibold text-gray-200 mb-3">
+                        Promotores Responsables
+                    </label>
+                    <select id="promotores" formControlName="promotores" multiple
+                        class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+                        <option *ngFor="let promoter of promoters" [value]="promoter.id">{{ promoter.name }}
+                        </option>
+                    </select>
+                    <p class="mt-2 text-gray-400 text-sm">Selecciona uno o varios promotores responsables del
+                        evento.</p>
+                    @if (eventForm.get('promotores')?.invalid && eventForm.get('promotores')?.touched) {
+                    <p class="mt-2 text-red-400 flex items-center">
+                        <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                        Debes seleccionar al menos un promotor
+                    </p>
+                    }
                 </div>
 
                 <!-- Organization Section -->
-                <div class="mb-8">
+                <div class="mb-8" formGroupName="contact">
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
                         <div
                             class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-4">
@@ -169,25 +206,7 @@
                         Organización
                     </h2>
 
-                    <!-- Promotores responsables -->
-                    <div class="mb-8">
-                        <label for="promotores" class="block text-lg font-semibold text-gray-200 mb-3">
-                            Promotores Responsables
-                        </label>
-                        <select id="promotores" formControlName="promotores" multiple
-                            class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
-                            <option *ngFor="let promoter of promoters" [value]="promoter.id">{{ promoter.name }}
-                            </option>
-                        </select>
-                        <p class="mt-2 text-gray-400 text-sm">Selecciona uno o varios promotores responsables del
-                            evento.</p>
-                        @if (eventForm.get('promotores')?.invalid && eventForm.get('promotores')?.touched) {
-                        <p class="mt-2 text-red-400 flex items-center">
-                            <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
-                            Debes seleccionar al menos un promotor
-                        </p>
-                        }
-                    </div>
+
 
                     <!-- Contact Info -->
                     <div
@@ -199,10 +218,10 @@
                             <p class="text-lg font-semibold text-gray-200 mb-4">Tipo de Contacto</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <label class="group cursor-pointer">
-                                    <input type="radio" name="contact-type" value="whatsapp" class="sr-only"
-                                        onchange="updateContactType('whatsapp')">
-                                    <div id="whatsapp-option"
-                                        class="relative bg-gray-800/60 border-2 border-gray-600/50 rounded-xl p-6 transition-all duration-300 group-hover:border-green-500/50">
+                                    <input type="radio" name="type" formControlName="type" value="whatsapp"
+                                        class="sr-only" (change)="updateContactType('whatsapp')">
+                                    <div class="relative bg-gray-800/60 border-2 rounded-xl p-6 transition-all duration-300 group-hover:border-green-500/50"
+                                        [class]="eventForm.get('contact.type')?.value === 'whatsapp' ? 'border-green-500 bg-green-500/10' : 'border-gray-600/50'">
                                         <div class="flex items-center">
                                             <div
                                                 class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
@@ -213,14 +232,20 @@
                                                 <p class="text-gray-400 text-sm">Contacto directo por mensaje</p>
                                             </div>
                                         </div>
+                                        @if (eventForm.get('contact.type')?.value === 'whatsapp') {
+                                        <div class="absolute top-3 right-3">
+                                            <lucide-icon name="check-circle"
+                                                class="h-6 w-6 text-green-500"></lucide-icon>
+                                        </div>
+                                        }
                                     </div>
                                 </label>
 
                                 <label class="group cursor-pointer">
-                                    <input type="radio" name="contact-type" value="link" class="sr-only"
-                                        onchange="updateContactType('link')">
-                                    <div id="link-option"
-                                        class="relative bg-gray-800/60 border-2 border-gray-600/50 rounded-xl p-6 transition-all duration-300 group-hover:border-blue-500/50">
+                                    <input type="radio" name="type" formControlName="type" value="link"
+                                        class="sr-only" (change)="updateContactType('link')">
+                                    <div class="relative bg-gray-800/60 border-2 rounded-xl p-6 transition-all duration-300 group-hover:border-blue-500/50"
+                                        [class]="eventForm.get('contact.type')?.value === 'link' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-600/50'">
                                         <div class="flex items-center">
                                             <div
                                                 class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
@@ -231,6 +256,12 @@
                                                 <p class="text-gray-400 text-sm">Página de venta de entradas</p>
                                             </div>
                                         </div>
+                                        @if (eventForm.get('contact.type')?.value === 'link') {
+                                        <div class="absolute top-3 right-3">
+                                            <lucide-icon name="check-circle"
+                                                class="h-6 w-6 text-blue-500"></lucide-icon>
+                                        </div>
+                                        }
                                     </div>
                                 </label>
                             </div>
@@ -239,13 +270,27 @@
                         <!-- Contact Value -->
                         <div>
                             <label for="contact-value" class="block text-lg font-semibold text-gray-200 mb-3">
-                                <span id="contact-label" class="flex items-center">
+                                @if (eventForm.get('contact.type')?.value === 'whatsapp') {
+                                <span class="flex items-center">
                                     <lucide-icon name="phone" class="mr-2 h-5 w-5 text-green-400"></lucide-icon>
                                     Número de WhatsApp
                                 </span>
+                                } @else {
+                                <span class="flex items-center">
+                                    <lucide-icon name="link" class="mr-2 h-5 w-5 text-blue-400"></lucide-icon>
+                                    URL del Enlace
+                                </span>
+                                }
                             </label>
-                            <input type="text" id="contact-value" placeholder="ej. 573101234567"
+                            <input type="text" id="contact-value" formControlName="value"
+                                [placeholder]="formatContactPlaceholder()"
                                 class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-6 py-4 text-white text-lg placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 hover:border-gray-500/70">
+                            @if (eventForm.get('contact.value')?.invalid && eventForm.get('contact.value')?.touched) {
+                            <p class="mt-2 text-red-400 flex items-center">
+                                <lucide-icon name="alert-circle" class="mr-2 h-4 w-4"></lucide-icon>
+                                El contacto es requerido
+                            </p>
+                            }
                         </div>
                     </div>
                 </div>
@@ -261,10 +306,9 @@
                     </h2>
 
                     <div class="space-y-3">
-                        <input type="text" id="tags-input"
+                        <input type="text" id="tags-input" formControlName="tagsInput"
                             placeholder="Escribe etiquetas separadas por comas (ej. Underground, All Night, International)"
-                            class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-4 py-3 text-white text-base placeholder-gray-400 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 hover:border-gray-500/70"
-                            onchange="updateTags()">
+                            class="w-full bg-gray-800/60 border-2 border-gray-600/50 rounded-xl px-4 py-3 text-white text-base placeholder-gray-400 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 hover:border-gray-500/70">
                         <p class="text-gray-400 text-sm">
                             Las etiquetas ayudan a los usuarios a encontrar tu evento más fácilmente
                         </p>
@@ -282,9 +326,15 @@
                         class="px-6 py-2.5 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700/50 transition-colors duration-200">
                         Cancelar
                     </a>
-                    <button type="submit"
-                        class="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 flex items-center">
-                        Crear Evento
+                    <button type="submit" [disabled]="eventForm.invalid || isSubmitting"
+                        class="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center">
+                        @if (isSubmitting) {
+                        <lucide-icon name="loader-2" class="mr-3 h-6 w-6 animate-spin"></lucide-icon>
+                        <span>Creando...</span>
+                        } @else {
+                        <lucide-icon name="sparkles" class="mr-3 h-6 w-6"></lucide-icon>
+                        <span>{{submitButtonText}}</span>
+                        }
                     </button>
                 </div>
             </form>

@@ -8,8 +8,6 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Event } from '../../../core/models/event.model';
 import { PromoterService } from '../../../core/services/promoter.service';
 import { Promoter } from '../../../core/models/promoter.model';
-import { EtapaBoletaService } from '../../../core/services/etapa-boleta.service';
-import { EtapaBoleta } from '../../../core/models/etapa-boleta.model';
 
 @Component({
   selector: 'app-event-form',
@@ -33,9 +31,9 @@ export class EventFormComponent implements OnInit {
 
   promoters: Promoter[] = []
 
-  loading: boolean = false;
-  selectedTags: string[] = [];
-  
+  loading = false
+  selectedTags: string[] = []
+
   constructor(
     private fb: FormBuilder,
     private eventService: EventService,
@@ -44,7 +42,7 @@ export class EventFormComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.initForm()
     this.checkMode()
     this.loadPromotores()
@@ -61,18 +59,12 @@ export class EventFormComponent implements OnInit {
       genre: ["", [Validators.required]],
       capacity: ["", [Validators.min(1)]],
       featured: [false],
-      price: this.fb.group({
-        min: ["", [Validators.min(0)]],
-        max: ["", [Validators.min(0)]],
-        currency: ["COP", [Validators.required]],
-      }),
       contact: this.fb.group({
         type: ["whatsapp", [Validators.required]],
         value: ["", [Validators.required]],
       }),
       tagsInput: [""],
     })
-    this.eventForm.get("price")?.setValidators(this.priceRangeValidator)
   }
 
   private loadPromotores(): void {
@@ -86,23 +78,25 @@ export class EventFormComponent implements OnInit {
     })
   }
 
-  private checkMode(): void {
-    this.route.paramMap.subscribe((params) => {
+  async checkMode(): Promise<void> {
+    debugger;
+    this.route.paramMap.subscribe(async (params) => {
       const id = params.get("id")
       if (id) {
         this.editMode = true
         this.eventId = +id
         this.pageTitle = "Editar Evento"
         this.submitButtonText = "Guardar Cambios"
-        this.loadEventData(this.eventId)
+        await this.loadEventData(this.eventId)
       }
     })
   }
 
-  private loadEventData(id: number): void {
-    this.eventService.getEvent(id).subscribe({
+  private async loadEventData(id: number): Promise<void> {
+    await this.eventService.getEvent(id).subscribe({
       next: (event) => {
         if (event) {
+          debugger;
           this.eventForm.patchValue({
             ...event,
             date: this.formatDateForInput(event.date),
@@ -126,20 +120,16 @@ export class EventFormComponent implements OnInit {
     return `${year}-${month}-${day}T${hours}:${minutes}`
   }
 
-  priceRangeValidator(group: any) {
-    const min = group.get("min")?.value
-    const max = group.get("max")?.value
-    if (min && max && Number.parseFloat(max) <= Number.parseFloat(min)) {
-      return { priceRangeInvalid: true }
-    }
-    return null
-  }
-
   onSubmit(): void {
-    debugger;
+    console.log("Form submitted!")
+    console.log("Form valid:", this.eventForm.valid)
+    console.log("Form value:", this.eventForm.value)
+    console.log("Form errors:", this.getFormValidationErrors())
+
     if (this.eventForm.invalid) {
       this.eventForm.markAllAsTouched()
       this.showFormErrors()
+      console.log("Form is invalid, stopping submission")
       return
     }
 
@@ -163,7 +153,6 @@ export class EventFormComponent implements OnInit {
       genre: formValue.genre,
       capacity: formValue.capacity ? Number.parseInt(formValue.capacity) : undefined,
       featured: formValue.featured || false,
-      price: this.buildPriceObject(formValue.price),
       contact: {
         type: formValue.contact.type,
         value: formValue.contact.value,
@@ -191,24 +180,17 @@ export class EventFormComponent implements OnInit {
     })
   }
 
-  private buildPriceObject(priceForm: any) {
-    if (!priceForm.min && !priceForm.max) {
-      return undefined
-    }
+  private getFormValidationErrors(): any {
+    const formErrors: any = {}
 
-    const priceObj: any = {
-      currency: priceForm.currency || "COP",
-    }
+    Object.keys(this.eventForm.controls).forEach((key) => {
+      const controlErrors = this.eventForm.get(key)?.errors
+      if (controlErrors) {
+        formErrors[key] = controlErrors
+      }
+    })
 
-    if (priceForm.min) {
-      priceObj.min = Number.parseFloat(priceForm.min)
-    }
-
-    if (priceForm.max) {
-      priceObj.max = Number.parseFloat(priceForm.max)
-    }
-
-    return priceObj
+    return formErrors
   }
 
   private getDefaultImage(genre: string): string {
@@ -306,12 +288,32 @@ export class EventFormComponent implements OnInit {
   resetForm(): void {
     this.eventForm.reset({
       contact: { type: "whatsapp" },
-      price: { currency: "COP" },
       featured: false,
     })
   }
 
   removeTag(tag: string): void {
     this.selectedTags = this.selectedTags.filter((t) => t !== tag)
+  }
+
+  updateContactType(type: string): void {
+    debugger;
+    console.log("Updating contact type to:", type)
+    this.eventForm.get("contact.type")?.setValue(type)
+
+    const whatsappOption = document.getElementById("whatsapp-option")
+    const linkOption = document.getElementById("link-option")
+
+    if (type === "whatsapp") {
+      whatsappOption?.classList.add("border-green-500")
+      whatsappOption?.classList.remove("border-gray-600/50")
+      linkOption?.classList.remove("border-blue-500")
+      linkOption?.classList.add("border-gray-600/50")
+    } else {
+      linkOption?.classList.add("border-blue-500")
+      linkOption?.classList.remove("border-gray-600/50")
+      whatsappOption?.classList.remove("border-green-500")
+      whatsappOption?.classList.add("border-gray-600/50")
+    }
   }
 }

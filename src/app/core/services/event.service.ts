@@ -37,7 +37,7 @@ export class EventService {
   getEvent(id: number): Observable<Event | undefined> {
     debugger;
     return this.http.get(`${environment.eventService}/${id}`).pipe(
-      map((response: any) => response.data)
+      map((response: any) => response)
     )
   }
 
@@ -54,7 +54,7 @@ export class EventService {
   }
 
   updateEvent(id: number, eventData: Partial<Event>): Observable<Event> {
-    return this.http.put(`${environment.eventService}/${id}`, eventData).pipe(
+    return this.http.put(`${environment.eventService}/${id}`, eventData, this.bearerService.bearerToken).pipe(
       map((response: any) => response.data)
     )
   }

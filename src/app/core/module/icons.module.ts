@@ -59,7 +59,7 @@ import { LucideAngularModule, Plus, Calendar, MapPin, ChevronLeft, Ticket, Phone
       ChevronDown,
       Briefcase,
       AlertTriangle,
-      ArrowRight
+      ArrowRight,
     })
   ],
   exports: [LucideAngularModule]
